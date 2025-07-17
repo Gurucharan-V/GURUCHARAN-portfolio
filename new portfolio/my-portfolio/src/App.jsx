@@ -1,24 +1,19 @@
 // App.jsx
 // Main entry point for the portfolio React application
-// This file is optimized for production, with clear structure and comments for code review.
+// Renders the interactive 3D computer model
 
 import React from 'react';
+import ComputerModel from './ComputerModel';
 
 /**
  * App Component
- * The root component for the portfolio site.
- * Add your main layout, routes, and global providers here.
+ * Renders the interactive 3D computer model as the landing page background/content.
  */
 export default function App() {
   return (
-    <main>
-      {/*
-        Portfolio Landing Page Content Goes Here
-        - Add your header, hero section, projects, etc.
-        - Use semantic HTML and accessible components
-      */}
-      <h1>Welcome to My Portfolio</h1>
-      {/* Example: Add more sections/components below */}
+    <main style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
+      {/* Interactive 3D Computer Model */}
+      <ComputerModel />
     </main>
   );
 }
