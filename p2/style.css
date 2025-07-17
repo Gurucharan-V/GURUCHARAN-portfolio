@@ -1,0 +1,247 @@
+/* =================================== */
+/* 1. Theming and Global Styles       */
+/* =================================== */
+
+:root {
+  /* DARK THEME (Default) */
+  --bg-color: #1a1b1f; 
+  --text-color: #e5e9f0;
+  --prompt-user-color: #a3be8c;
+  --prompt-path-color: #88c0d0;
+  --link-color: #81a1c1;
+  --link-hover-bg: #81a1c1;
+  --link-hover-text: #1a1b1f;
+  --ascii-color: #b48ead;
+  --cursor-color: rgba(229, 233, 240, 0.8);
+  --suggestion-color: #d08770;
+  --dialog-border-color: #4c566a;
+  --dialog-title-bg: #3b4252;
+}
+
+body.light-theme {
+  --bg-color: #eceff4;
+  --text-color: #2e3440;
+  --prompt-user-color: #4c566a;
+  --prompt-path-color: #5e81ac;
+  --link-color: #5e81ac;
+  --link-hover-bg: #5e81ac;
+  --link-hover-text: #eceff4;
+  --ascii-color: #bf616a;
+}
+
+body.theme-matrix {
+  --bg-color: #000000;
+  --text-color: #00ff41;
+  --prompt-user-color: #00ff41;
+  --prompt-path-color: #50fa7b;
+  --link-color: #00ff41;
+  --link-hover-bg: #00ff41;
+  --link-hover-text: #000000;
+  --ascii-color: #50fa7b;
+}
+
+html { font-size: 20px; box-sizing: border-box; }
+
+body {
+  margin: 0; padding: 0;
+  font-family: 'VT323', monospace;
+  transition: background-color 0.3s ease;
+  cursor: default;
+  background: #0f2027;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #2c5364, #203a43, #0f2027);
+  background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+  overflow: hidden; /* Prevents whole page from scrolling */
+}
+
+*, *:before, *:after { box-sizing: inherit; }
+
+a, #theme-toggle, .command-grid span, #retry-btn, #dialog-close-btn, .command-suggestion {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#screen {
+    width: 100%; height: 100vh;
+    background-color: var(--bg-color); color: var(--text-color); 
+    display: flex; flex-direction: column; position: absolute;
+    top: 0; left: 0;
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+    z-index: 5;
+    overflow: hidden;
+}
+
+/* CRT Scanlines Effect */
+#screen::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+#content {
+    padding: 1rem 1.5rem; font-size: 1rem; flex-grow: 1; overflow-y: auto;
+}
+
+.input-line {
+    display: flex; padding: 0 1.5rem 0.5rem; flex-shrink: 0; align-items: center;
+}
+
+#command-input {
+    background: transparent; border: none; color: inherit; font-family: inherit;
+    font-size: 1rem; outline: none; flex-grow: 1; padding-left: 0.5rem;
+}
+
+@keyframes blink { 50% { background-color: transparent; } }
+#cursor {
+    width: 10px; height: 1.1rem; background-color: var(--cursor-color);
+    display: inline-block; animation: blink 1s step-end infinite;
+}
+
+#theme-toggle {
+    position: absolute; top: 1rem; right: 1.5rem; z-index: 10;
+    font-size: 1rem; color: var(--link-color); padding: 2px 4px;
+}
+#theme-toggle:hover { background-color: var(--link-hover-bg); color: var(--link-hover-text); }
+
+.ascii-art {
+    white-space: pre; 
+    font-size: 0.7rem; 
+    line-height: 1.1;
+    color: var(--ascii-color); 
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10px, black 95%, transparent);
+}
+
+.command-suggestion { color: var(--suggestion-color); text-decoration: underline; }
+.game-canvas { background-color: var(--bg-color); border: 1px solid var(--prompt-path-color); margin-top: 1rem; }
+#retry-btn, a { color: var(--link-color); text-decoration: underline; }
+a:hover, #retry-btn:hover { background-color: var(--link-hover-bg); color: var(--link-hover-text); }
+.command-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.5rem; margin-top: 1rem; }
+.command-grid span:hover { background-color: var(--link-hover-bg); color: var(--link-hover-text); }
+.command-grid span[data-disabled="true"] {
+    color: var(--dialog-border-color);
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+.command-grid span[data-disabled="true"]:hover {
+    background-color: transparent;
+    color: var(--dialog-border-color);
+}
+#mobile-dialog-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(2px); }
+#mobile-dialog-overlay.hidden { display: none; }
+#mobile-dialog-box { background-color: var(--bg-color); color: var(--text-color); border: 3px double var(--dialog-border-color); width: 90%; max-width: 340px; font-size: 1rem; box-shadow: 0 0 0 3px var(--bg-color), 0 0 0 5px var(--dialog-border-color); }
+#dialog-title-bar { background-color: var(--dialog-title-bg); padding: 0.3rem 0.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--dialog-border-color); font-size: 1.2rem; }
+#dialog-close-btn { background: #bf616a; color: var(--bg-color); border: 1px solid var(--text-color); font-family: 'VT323', monospace; padding: 0 0.4rem; font-size: 1rem; }
+#dialog-close-btn:hover { background: #d08770; }
+#dialog-content { padding: 0.8rem 1rem; line-height: 1.4; }
+#dialog-content p:last-child { font-size: 0.8rem; opacity: 0.7; margin-top: 1rem; }
+.social-link { display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--text-color); padding: 4px 6px; }
+.social-link:hover { background-color: var(--link-hover-bg); color: var(--link-hover-text) !important; }
+.pixel-icon { color: var(--link-color); font-weight: bold; font-size: 1.2em; }
+.social-link:hover .pixel-icon { color: var(--link-hover-text); }
+
+/* =================================== */
+/* 2. Landing Page & Animations  */
+/* =================================== */
+
+@keyframes slideUpAndFade {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-100%); opacity: 0; }
+}
+
+#screen.killed {
+    animation: slideUpAndFade 0.6s ease-in-out forwards;
+}
+
+#landing-page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out 0.3s; /* Fade in after slide */
+    pointer-events: none; /* Inactive when hidden */
+}
+
+#landing-page.visible {
+    opacity: 1;
+    pointer-events: all; /* Active when visible */
+}
+
+#landing-page.hidden {
+    display: none;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 2rem 3rem;
+    text-align: center;
+}
+
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    margin-bottom: 1rem;
+}
+
+.glass-card h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.glass-card p {
+    margin: 0.5rem 0 1.5rem 0;
+    font-size: 1rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.social-links a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.social-links a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#return-to-terminal {
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #88c0d0; /* A color from your terminal theme */
+    color: #2e3440;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#return-to-terminal:hover {
+    transform: translateY(-2px);
+    background-color: #a3be8c;
+}
