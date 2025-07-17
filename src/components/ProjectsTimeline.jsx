@@ -21,7 +21,7 @@ const ProjectItem = ({ project, index }) => {
       viewport={{ once: true, margin: '-30px' }}
     >
       <h2
-        className="text-white text-6xl sm:text-9xl md:text-[10rem] lg:text-[14rem] font-black leading-none cursor-pointer transform -skew-x-24 md:-skew-x-24 transition-all duration-150 outline-none group-hover:text-transparent group-hover:[-webkit-text-stroke:4px_white] focus:text-transparent focus:[-webkit-text-stroke:4px_white]"
+        className="text-white text-6xl sm:text-9xl md:text-[10rem] lg:text-[14rem] font-black leading-none cursor-pointer transform -skew-x-24 md:-skew-x-24 transition-all duration-150 outline-none group-hover:text-transparent group-hover:[-webkit-text-stroke:4px_white] focus:text-transparent focus:[-webkit-text-stroke:4px_white] text-right"
         tabIndex={0}
         style={{ WebkitTextStroke: '0px white' }}
         onMouseEnter={e => {
@@ -67,10 +67,10 @@ const ProjectsTimeline = () => {
       aria-labelledby="work-section-title"
     >
       <motion.div
-        className="relative transform -skew-x-24"
+        className="relative transform -skew-x-24 flex flex-col items-end"
         style={{ y }}
       >
-        <div className="transform skew-x-24">
+        <div className="transform skew-x-24 flex flex-col items-end">
           {projects.map((project, index) => (
             <ProjectItem
               key={project.id}
