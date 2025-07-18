@@ -11,7 +11,7 @@ const projects = [
   { id: 6, title: 'GITHUB', link: 'https://github.com/Gurucharan-V' },
   { id: 7, title: 'CONTACT', link: '/contact.html' },
   { id: 8, title: 'RESUME' },
-  { id: 9, title: 'SKILLS' },
+  { id: 9, title: 'SKILLS', link: '/projects.html'},
 ];
 
 const ProjectItem = ({ project, index }) => {
@@ -49,7 +49,11 @@ const ProjectItem = ({ project, index }) => {
         }}
       >
         {project.link ? (
-          <a href={project.link} target="_blank" rel="noopener noreferrer" className="no-outline" style={{ color: 'inherit', textDecoration: 'none' }}>{project.title}</a>
+          project.link.startsWith('http') ? (
+            <a href={project.link} target="_blank" rel="noopener noreferrer" className="no-outline" style={{ color: 'inherit', textDecoration: 'none' }}>{project.title}</a>
+          ) : (
+            <a href={project.link} className="no-outline" style={{ color: 'inherit', textDecoration: 'none' }}>{project.title}</a>
+          )
         ) : (
           project.title
         )}
