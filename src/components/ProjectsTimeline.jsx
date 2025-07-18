@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useScroll, useTransform } from 'framer-motion';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const projects = [
   { id: 1, title: 'GURUCHARAN V', link: '/about.html' },
@@ -9,9 +10,9 @@ const projects = [
   { id: 4, title: 'PROJECTS', link: '/projects.html' },
   { id: 5, title: 'LINKEDIN', link: 'https://www.linkedin.com/in/gurucharanvem/' },
   { id: 6, title: 'GITHUB', link: 'https://github.com/Gurucharan-V' },
-  { id: 7, title: 'CONTACT', link: '/contact.html' },
-  { id: 8, title: 'RESUME' },
-  { id: 9, title: 'SKILLS', link: '/projects.html'},
+  { id: 7, title: 'RESUME' },
+  { id: 8, title: 'SKILLS', link: '/projects.html'},
+  { id: 7, title: 'HIRE ME', link: '/contact.html' },
 ];
 
 const ProjectItem = ({ project, index }) => {
@@ -52,7 +53,7 @@ const ProjectItem = ({ project, index }) => {
           project.link.startsWith('http') ? (
             <a href={project.link} target="_blank" rel="noopener noreferrer" className="no-outline" style={{ color: 'inherit', textDecoration: 'none' }}>{project.title}</a>
           ) : (
-            <a href={project.link} className="no-outline" style={{ color: 'inherit', textDecoration: 'none' }}>{project.title}</a>
+            <Link to={project.link.replace('.html', '').replace('/index', '/')} className="no-outline" style={{ color: 'inherit', textDecoration: 'none' }}>{project.title}</Link>
           )
         ) : (
           project.title

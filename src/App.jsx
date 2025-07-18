@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
 import Lenis from 'lenis';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import About from './components/About';
+import Contact from './components/Contact';
+import Projects from './components/Projects';
+import EduExp from './components/EduExp';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProjectsTimeline from './components/ProjectsTimeline';
@@ -35,16 +40,26 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <BrowserRouter>
       <CustomCursor />
       <Header />
       <main id="main-content" role="main" tabIndex={-1} className="outline-none focus:outline-none">
-        <Hero />
-        <ProjectsTimeline />
-        {/* <WorkList /> */}
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Hero />
+              <ProjectsTimeline />
+              <WorkList />
+              <Footer />
+            </>
+          } />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/edu-exp" element={<EduExp />} />
+        </Routes>
       </main>
-      <Footer />
-    </>
+    </BrowserRouter>
   );
 };
 
