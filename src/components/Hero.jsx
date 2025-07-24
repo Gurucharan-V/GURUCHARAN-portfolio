@@ -84,8 +84,8 @@ export default function Hero() {
           className="uppercase text-white text-[12vw] font-black leading-none cursor-pointer transform -skew-x-24 md:-skew-x-24 transition-all duration-150 outline-none mx-auto w-full max-w-full select-none group break-words whitespace-normal mb-24"
           tabIndex={0}
           style={{ WebkitTextStroke: '0px white' }}
-          onClick={() => window.location.href = '/about.html'}
-          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') window.location.href = '/about.html'; }}
+          onClick={() => window.location.href = '/about'}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') window.location.href = '/about'; }}
         >
           {renderLine(FIRST_LINE, outlinedIndices[1], 1)}
           {renderLine(SECOND_LINE, outlinedIndices[2], 2)}

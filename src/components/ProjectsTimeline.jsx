@@ -4,15 +4,15 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const projects = [
-  { id: 1, title: 'GURUCHARAN V', link: '/about.html' },
-  { id: 2, title: 'EDUCATION', link: '/edu-exp.html' },
-  { id: 3, title: 'EXPERIENCE', link: '/edu-exp.html' },
-  { id: 4, title: 'PROJECTS', link: '/projects.html' },
+  { id: 1, title: 'GURUCHARAN V', link: '/about' },
+  { id: 2, title: 'EDUCATION', link: '/edu-exp' },
+  { id: 3, title: 'EXPERIENCE', link: '/edu-exp' },
+  { id: 4, title: 'PROJECTS', link: '/projects' },
   { id: 5, title: 'LINKEDIN', link: 'https://www.linkedin.com/in/gurucharanvem/' },
   { id: 6, title: 'GITHUB', link: 'https://github.com/Gurucharan-V' },
   { id: 7, title: 'RESUME' },
-  { id: 8, title: 'SKILLS', link: '/projects.html'},
-  { id: 7, title: 'HIRE ME', link: '/contact.html' },
+  { id: 8, title: 'SKILLS', link: '/projects'},
+  { id: 7, title: 'HIRE ME', link: '/contact' },
 ];
 
 const ProjectItem = ({ project, index }) => {
