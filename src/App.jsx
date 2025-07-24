@@ -11,6 +11,7 @@ import ProjectsTimeline from './components/ProjectsTimeline';
 import Footer from './components/Footer';
 import WorkList from './components/WorkList';
 import CustomCursor from './components/CustomCursor';
+import FlowingMenuDemo from './components/FlowingMenuDemo';
 
 const App = () => {
   // Initialize Lenis for smooth scrolling
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/edu-exp" element={<EduExp />} />
+          <Route path="/flowing-menu-demo" element={<FlowingMenuDemo />} />
         </Routes>
       </main>
     </BrowserRouter>
