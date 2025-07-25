@@ -1,78 +1,148 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import HeroText from './HeroText';
-import GooeyTabs from './GooeyTabs';
 
 const EduExp = () => {
-  const [data, setData] = useState({ education: [], experience: [] });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [activeSection, setActiveSection] = useState('education');
 
-  useEffect(() => {
-    fetch('/eduexp.json')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to load education/experience data');
-        return res.json();
-      })
-      .then((json) => {
-        setData(json);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+  const educationData = [
+    {
+      degree: "MASTER OF SCIENCE (MS) - INFORMATION TECHNOLOGY (STEM)",
+      institution: "UNIVERSITY OF WISCONSIN-MILWAUKEE",
+      period: "Sep 2023 - May 2025",
+      description: "Completed a 30-credit program focused on ML, data systems, cybersecurity, and cloud technologies.",
+      concentration: "AI, Data Analytics, Business Intelligence",
+      gpa: "3.87/4.0",
+      logo: "UWM"
+    },
+    {
+      degree: "BACHELOR OF TECHNOLOGY (BTECH) - COMPUTER SCIENCE & ENGINEERING",
+      institution: "NBKR INSTITUTE OF SCIENCE AND TECHNOLOGY",
+      period: "Sep 2018 - May 2022",
+      description: "Comprehensive program covering core computer science principles and modern software development.",
+      concentration: "Data Structures, Algorithms, Operating Systems, OOP, Computer Networks, DBMS",
+      gpa: "8.7/10",
+      logo: "NBKR"
+    }
+  ];
 
-  if (loading) return <div className="text-white text-center py-16">Loading...</div>;
-  if (error) return <div className="text-red-500 text-center py-16">{error}</div>;
+  const experienceData = [
+    {
+      title: "SOFTWARE ENGINEER",
+      company: "TECH COMPANY",
+      period: "2023 - Present",
+      location: "Milwaukee, WI",
+      description: "Developed full-stack applications using modern technologies."
+    },
+    {
+      title: "DEVELOPER INTERN",
+      company: "STARTUP",
+      period: "2022 - 2023",
+      location: "Remote",
+      description: "Worked on frontend development and user experience improvements."
+    }
+  ];
 
   return (
-    <main className="min-h-screen bg-black text-white font-sans px-4 py-16 md:px-16 lg:px-48">
-      {/* Education Section with Gooey Tabs */}
-      <section className="mb-32">
-        <div className="mb-16 text-center">
-          <HeroText text="Education" />
-        </div>
-        <GooeyTabs education={data.education} />
-      </section>
-      {/* Experience Section */}
-      <section>
-        <div className="mb-16 text-center">
-          <HeroText text="Experience" />
-        </div>
-        <div className="space-y-10">
-          {data.experience.map((exp) => (
-            <div key={exp.id} className="bg-surface rounded-lg p-6 shadow-lg border border-border">
-              <h3 className="text-2xl md:text-3xl font-semibold mb-2">{exp.title}</h3>
-              <div className="text-lg md:text-xl font-medium mb-1">{exp.company}</div>
-              <div className="text-sm text-secondary mb-2">{exp.period} &mdash; {exp.location}</div>
-              <div className="text-base mb-1">{exp.description}</div>
+    <main className="relative min-h-screen bg-background text-white font-sans overflow-hidden">
+      {/* Subtle background overlay */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute top-16 left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
+        <div className="absolute bottom-24 right-16 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 w-[28rem] h-[28rem] bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      </div>
+
+      {/* Main Content Container */}
+      <div className="relative z-10 h-screen">
+        
+        {/* Education Section - Slides as one unit */}
+        <div className={`absolute inset-0 transition-transform duration-700 ease-in-out ${
+          activeSection === 'education' ? 'translate-x-0' : '-translate-x-[calc(100%-200px)]'
+        }`}>
+          <div className="flex h-full">
+            {/* Left Side - Education Heading */}
+            <div className="w-1/2 flex items-start pt-16 md:pt-24 lg:pt-32 pl-4 md:pl-8 lg:pl-12">
+              <HeroText text="EDUCATION" className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl" />
             </div>
-          ))}
+            
+            {/* Right Side - Education Content */}
+            <div className="w-1/2 flex flex-col justify-center pr-8 md:pr-16 lg:pr-24">
+              <div className="space-y-8">
+                {educationData.map((edu, index) => (
+                  <div key={index} className="flex items-start space-x-4">
+                    {/* Logo */}
+                    <div className="flex-shrink-0 w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center border border-white/20">
+                      <span className="text-white font-bold text-xs">{edu.logo}</span>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="flex-1 space-y-2">
+                      <h3 className="text-lg font-bold text-primary leading-tight">{edu.degree}</h3>
+                      <p className="text-base font-medium text-white/90">{edu.institution}</p>
+                      <p className="text-sm text-secondary">{edu.period}</p>
+                      <p className="text-sm text-white/80 leading-relaxed">{edu.description}</p>
+                      {edu.concentration && (
+                        <p className="text-xs text-secondary">Concentration: {edu.concentration}</p>
+                      )}
+                      {edu.gpa && (
+                        <p className="text-xs text-secondary">GPA: {edu.gpa}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
-      {/* Installation and Usage Section */}
-      <section className="mt-24 bg-white text-black rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold mb-4">Installation</h2>
-        <div className="mb-4">
-          <div className="font-semibold mb-2">CLI</div>
-          <pre className="bg-black text-white rounded p-2 overflow-x-auto mb-2 text-sm">pnpm dlx shadcn@latest add "https://fancycomponents.dev/r/gooey-svg-filter.json"</pre>
-          <div className="font-semibold mb-2">Manual</div>
-          <ul className="list-disc list-inside mb-2 text-sm">
-            <li>pnpm</li>
-            <li>npm</li>
-            <li>yarn</li>
-            <li>bun</li>
-          </ul>
+
+        {/* Experience Section */}
+        <div className={`absolute inset-0 transition-transform duration-700 ease-in-out ${
+          activeSection === 'experience' ? 'translate-x-0' : 'translate-x-full'
+        }`}>
+          <div className="flex h-full">
+            {/* Left Side - Experience Heading */}
+            <div className="w-1/2 flex items-start pt-16 md:pt-24 lg:pt-32 pl-4 md:pl-8 lg:pl-12">
+              <HeroText text="EXPERIENCE" className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl" />
+            </div>
+            
+            {/* Right Side - Experience Content */}
+            <div className="w-1/2 flex flex-col justify-center pr-8 md:pr-16 lg:pr-24">
+              <div className="space-y-6">
+                {experienceData.map((exp, index) => (
+                  <div key={index} className="space-y-2">
+                    <h3 className="text-lg font-bold text-primary">{exp.title}</h3>
+                    <p className="text-base font-medium text-white/90">{exp.company}</p>
+                    <p className="text-sm text-secondary">{exp.period} — {exp.location}</p>
+                    <p className="text-sm text-white/80 leading-relaxed">{exp.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-        <h2 className="text-3xl font-bold mb-4 mt-8">Usage</h2>
-        <p className="mb-2 text-sm">Add the <code>GooeySvgFilter</code> component to your project, pass an <code>id</code> prop to the component (optional), then use the same <code>id</code> prop in the <code>filter</code> CSS property of the container you want to apply the filter to. High-level example:</p>
-        <pre className="bg-black text-white rounded p-2 overflow-x-auto mb-2 text-sm">{`<GooeySvgFilter id="gooey-filter" />
-<div style={{ filter: "url(#gooey-filter)" }}>
-  filter will be applied here
-</div>`}</pre>
-        <p className="text-xs text-gray-600 mt-4">The filter applies a blur and increases the contrast of the alpha channel, then composites the layers. See <a href="https://css-tricks.com/gooey-effect/" target="_blank" rel="noopener noreferrer" className="underline">this article by Lucas Bebber</a> for more details.</p>
-      </section>
+
+        {/* Dynamic Side Bar - Changes position and content based on active section */}
+        {activeSection === 'education' ? (
+          // Right sidebar for Experience when Education is active
+          <div className="absolute right-0 top-0 h-full w-16 bg-black/20 backdrop-blur-sm border-l border-white/10 flex flex-col items-center justify-center z-20">
+            <button
+              onClick={() => setActiveSection('experience')}
+              className="writing-mode-vertical transform rotate-90 text-lg font-bold transition-all duration-300 text-white/60 hover:text-white"
+            >
+              EXPERIENCE
+            </button>
+          </div>
+        ) : (
+          // Left sidebar for Education when Experience is active
+          <div className="absolute left-0 top-0 h-full w-16 bg-black/20 backdrop-blur-sm border-r border-white/10 flex flex-col items-center justify-center z-20">
+            <button
+              onClick={() => setActiveSection('education')}
+              className="writing-mode-vertical transform rotate-90 text-lg font-bold transition-all duration-300 text-white/60 hover:text-white"
+            >
+              EDUCATION
+            </button>
+          </div>
+        )}
+      </div>
     </main>
   );
 };
