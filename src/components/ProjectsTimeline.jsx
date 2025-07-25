@@ -15,8 +15,7 @@ const projects = [
   { id: 5, title: 'LINKEDIN', link: 'https://www.linkedin.com/in/gurucharanvem/' },
   { id: 6, title: 'GITHUB', link: 'https://github.com/Gurucharan-V' },
   { id: 7, title: 'RESUME' },
-  { id: 8, title: 'SKILLS', link: '/projects'},
-  { id: 9, title: 'HIRE ME', isHireMe: true },
+  { id: 8, title: 'HIRE ME', isHireMe: true },
 ];
 
 const ProjectItem = ({ project, index, onHireMeClick, showContactDetails }) => {
