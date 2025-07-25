@@ -9,6 +9,17 @@ const VintageTerminal = () => {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isBooting, setIsBooting] = useState(true);
   const [cursorVisible, setCursorVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
@@ -24,41 +35,63 @@ const VintageTerminal = () => {
 
   // Available commands with easter eggs
   const commands = {
-    help: () => [
-      'Available commands:',
-      '  help          - Show this help message',
-      '  clear         - Clear terminal screen',
-      '  ls            - List all projects',
-      '  cat [project] - Show project details (e.g., cat 1)',
-      '  about         - Show system information',
-      '  skills        - Show project/skills table',
-      '  exit          - Exit terminal',
-      '  scan          - Run system diagnostics',
-      '  date          - Show current date and time',
-      '  whoami        - Show current user',
-      '  sudo          - Execute command as superuser',
-      '  matrix        - Enter the Matrix',
-      '  fortune       - Get a random fortune',
-      '  cowsay        - Make a cow say something',
-      '  sl            - Steam locomotive',
-      '  telnet        - Connect to remote host',
-      '  ping          - Test network connectivity',
-      '  top           - Show system processes',
-      '  ps            - Show running processes',
-      '  kill          - Terminate processes',
-      '  chmod         - Change file permissions',
-      '  rm            - Remove files (use with caution!)',
-      ''
-    ],
+    help: () => {
+      const baseCommands = [
+        'Available commands:',
+        '  help          - Show this help message',
+        '  clear         - Clear terminal screen',
+        '  ls            - List all projects',
+        '  cat [project] - Show project details (e.g., cat 1)',
+        '  about         - Show system information',
+        '  skills        - Show project/skills table',
+        '  exit          - Exit terminal',
+        '  scan          - Run system diagnostics',
+        '  date          - Show current date and time',
+        '  whoami        - Show current user',
+        '  sudo          - Execute command as superuser',
+        ''
+      ];
+      
+      const easterEggCommands = [
+        '  matrix        - Enter the Matrix',
+        '  fortune       - Get a random fortune',
+        '  cowsay        - Make a cow say something',
+        '  sl            - Steam locomotive',
+        '  telnet        - Connect to remote host',
+        '  ping          - Test network connectivity',
+        '  top           - Show system processes',
+        '  ps            - Show running processes',
+        '  kill          - Terminate processes',
+        '  chmod         - Change file permissions',
+        '  rm            - Remove files (use with caution!)',
+        ''
+      ];
+      
+      return isMobile ? baseCommands : [...baseCommands, ...easterEggCommands];
+    },
     clear: () => {
       setTerminalOutput([]);
       return [];
     },
     ls: () => {
-      const projectList = projectsData.map((project, index) => 
-        `${index + 1}. ${project.title}`
-      );
-      return ['Projects:', ...projectList, ''];
+      const output = [
+        'AVAILABLE PROJECTS',
+        '='.repeat(40),
+        ''
+      ];
+      
+      projectsData.forEach((project, index) => {
+        output.push(`${index + 1}. ${project.title}`);
+        output.push(`   Duration: ${project.duration}`);
+        output.push(`   Institution: ${project.institution}`);
+        output.push(''); // Empty line between projects
+      });
+      
+      output.push(`Total: ${projectsData.length} projects`);
+      output.push('Use "cat [number]" to view project details');
+      output.push('');
+      
+      return output;
     },
     cat: (args) => {
       if (!args || args.length === 0) {
@@ -67,18 +100,38 @@ const VintageTerminal = () => {
       const projectIndex = parseInt(args[0]) - 1;
       if (projectIndex >= 0 && projectIndex < projectsData.length) {
         const project = projectsData[projectIndex];
-        return [
-          `Project: ${project.title}`,
-          `Duration: ${project.duration}`,
-          `Institution: ${project.institution}`,
+        
+        // Format skills as JSON array
+        const formattedSkills = [
+          '    "skills": [',
+          ...project.skills.map((skill, index) => {
+            const isLast = index === project.skills.length - 1;
+            return `      "${skill}"${isLast ? '' : ','}`;
+          }),
+          '    ]'
+        ].join('\n');
+        
+        // Mobile-friendly formatting
+        const output = [
+          '='.repeat(50),
+          `PROJECT ${projectIndex + 1}`,
+          '='.repeat(50),
           '',
-          'Description:',
-          project.description,
+          '{',
+          `  "title": "${project.title}",`,
+          `  "duration": "${project.duration}",`,
+          `  "institution": "${project.institution}",`,
+          '  "description": ',
+          `    "${project.description.replace(/"/g, '\\"')}",`,
           '',
-          'Skills:',
-          project.skills.join(', '),
+          formattedSkills,
+          '}',
+          '',
+          '='.repeat(50),
           ''
         ];
+        
+        return output;
       }
       return [`Project ${args[0]} not found. Use 'ls' to see available projects.`, ''];
     },
@@ -96,11 +149,39 @@ const VintageTerminal = () => {
       ''
     ],
     skills: () => {
-      const arr = projectsData.map(project => ({
-        project: project.title,
-        skills: project.skills
-      }));
-      return [JSON.stringify(arr, null, 2), ''];
+      const output = [
+        'PROJECT SKILLS OVERVIEW',
+        '='.repeat(50),
+        ''
+      ];
+      
+      // Create JSON-like structure
+      output.push('{');
+      
+      projectsData.forEach((project, index) => {
+        const isLast = index === projectsData.length - 1;
+        output.push(`  "project_${index + 1}": {`);
+        output.push(`    "title": "${project.title}",`);
+        output.push(`    "duration": "${project.duration}",`);
+        output.push(`    "institution": "${project.institution}",`);
+        output.push('    "skills": [');
+        
+        // Format skills as JSON array
+        project.skills.forEach((skill, skillIndex) => {
+          const isLastSkill = skillIndex === project.skills.length - 1;
+          output.push(`      "${skill}"${isLastSkill ? '' : ','}`);
+        });
+        
+        output.push('    ]');
+        output.push(`  }${isLast ? '' : ','}`);
+      });
+      
+      output.push('}');
+      output.push('');
+      output.push(`Total Projects: ${projectsData.length}`);
+      output.push('');
+      
+      return output;
     },
     scan: () => [
       'Running system diagnostics...',
@@ -386,6 +467,15 @@ const VintageTerminal = () => {
     // Add command to output
     setTerminalOutput(prev => [...prev, `$ ${trimmedCmd}`]);
 
+    // Check for easter egg commands on mobile
+    const easterEggCommands = ['matrix', 'fortune', 'cowsay', 'sl', 'telnet', 'ping', 'top', 'ps', 'kill', 'chmod', 'rm'];
+    if (isMobile && easterEggCommands.includes(commandLower)) {
+      setTerminalOutput(prev => [...prev, `Command not available on mobile: ${command}`, 'Type "help" for available commands.', '']);
+      setCommandHistory(prev => [...prev, trimmedCmd]);
+      setHistoryIndex(-1);
+      return;
+    }
+
     // Execute command
     if (commands[commandLower]) {
       const output = commands[commandLower](args);
@@ -397,16 +487,27 @@ const VintageTerminal = () => {
     } else if (commandLower === 'exit') {
       // Handle exit command
       setTerminalOutput(prev => [...prev, 'Shutting down terminal...', '']);
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-      setTimeout(() => {
-        window.history.back();
-      }, 1000);
+      
+      // Safely handle fullscreen exit with error handling
+      const exitFullscreen = async () => {
+        try {
+          if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+          } else if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+            await document.webkitExitFullscreen();
+          } else if (document.msFullscreenElement && document.msExitFullscreen) {
+            await document.msExitFullscreen();
+          }
+        } catch (error) {
+          console.log('Fullscreen exit failed:', error.message);
+        }
+      };
+      
+      exitFullscreen().then(() => {
+        setTimeout(() => {
+          window.history.back();
+        }, 1000);
+      });
     } else {
       setTerminalOutput(prev => [...prev, `Command not found: ${command}`, 'Type "help" for available commands.', '']);
     }
@@ -417,7 +518,8 @@ const VintageTerminal = () => {
   };
 
   // List of available command names for autocompletion
-  const commandList = Object.keys(commands);
+  const easterEggCommands = ['matrix', 'fortune', 'cowsay', 'sl', 'telnet', 'ping', 'top', 'ps', 'kill', 'chmod', 'rm'];
+  const commandList = Object.keys(commands).filter(cmd => !isMobile || !easterEggCommands.includes(cmd));
 
   // Handle key press
   const handleKeyPress = (e) => {

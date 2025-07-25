@@ -41,6 +41,7 @@ const EduExp = () => {
         "Managed academic accommodations, web accessibility updates, and exam proctoring.",
         "Contributed to ensuring inclusive access to learning resources."
       ],
+      mobileHighlight: "Delivered disability support services and managed academic accommodations using assistive technology per ADA standards.",
       skills: ["Assistive Technology", "ADA Compliance", "Accessibility Standards", "Academic Support", "Web Accessibility", "Exam Proctoring", "Disability Services"]
     },
     {
@@ -55,6 +56,7 @@ const EduExp = () => {
         "Ensured cost-effective sourcing and compliance with university standards.",
         "Supervised and trained student staff."
       ],
+      mobileHighlight: "Led procurement operations for campus dining including inventory management, vendor coordination, and staff supervision.",
       skills: ["Procurement Management", "Inventory Management", "Vendor Coordination", "Team Leadership", "Staff Training", "Cost Management", "Compliance"]
     },
     {
@@ -68,6 +70,7 @@ const EduExp = () => {
         "Supported procurement and supply chain operations.",
         "Focused on ordering, tracking, and vendor communication for campus dining."
       ],
+      mobileHighlight: "Supported procurement operations including ordering, tracking, and vendor communication for campus dining.",
       skills: ["Procurement", "Supply Chain", "Order Management", "Vendor Communication", "Inventory Tracking"]
     },
     {
@@ -82,6 +85,7 @@ const EduExp = () => {
         "Integrated MediaPipe for real-time AI tracking.",
         "Applied deep learning techniques to optimize performance."
       ],
+      mobileHighlight: "Developed ML models including fake news detection using XGBoost and integrated MediaPipe for real-time AI tracking.",
       skills: ["TensorFlow", "Machine Learning", "XGBoost", "MediaPipe", "Deep Learning", "AI Model Development", "Real-time Tracking", "Python", "Data Science"]
     },
     {
@@ -96,6 +100,7 @@ const EduExp = () => {
         "Organized workshops on Visual Studio, Office 365, and Microsoft tools.",
         "Built a student tech community and supported peer learning and development."
       ],
+      mobileHighlight: "Acted as campus ambassador promoting Microsoft technologies, organized workshops, and built student tech community.",
       skills: ["Microsoft Technologies", "Visual Studio", "Office 365", "Community Building", "Workshop Organization", "Technical Training", "Student Leadership"]
     }
   ];
@@ -143,7 +148,7 @@ const EduExp = () => {
             viewport={{ once: true }}
             className="space-y-12"
           >
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight uppercase">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-none tracking-tight uppercase">
               EDUCATION
             </h2>
             
@@ -191,7 +196,7 @@ const EduExp = () => {
                         <p className="text-lg text-white/90 leading-relaxed">
                           {edu.highlights}
                         </p>
-                        <div className="space-y-2">
+                        <div className="space-y-2 hidden md:block">
                           <div className="text-lg text-white/80 font-semibold">
                             Key Skills:
                           </div>
@@ -226,7 +231,7 @@ const EduExp = () => {
             viewport={{ once: true }}
             className="space-y-12"
           >
-            <h3 className="text-7xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight uppercase">
+            <h3 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-none tracking-tight uppercase">
               EXPERIENCE
             </h3>
             
@@ -274,7 +279,14 @@ const EduExp = () => {
                          <div className="text-lg text-white/80 font-semibold">
                            Highlights:
                          </div>
-                         <ul className="space-y-2 pl-4">
+                         {/* Mobile: Single summarized point */}
+                         <div className="block md:hidden">
+                           <p className="text-lg text-white/90 leading-relaxed">
+                             {exp.mobileHighlight}
+                           </p>
+                         </div>
+                         {/* Desktop: Full list of highlights */}
+                         <ul className="space-y-2 pl-4 hidden md:block">
                            {exp.highlights.map((highlight, highlightIndex) => (
                              <li key={highlightIndex} className="text-lg text-white/90 leading-relaxed flex items-start">
                                <span className="text-white/60 mr-2 mt-2">•</span>
@@ -284,7 +296,7 @@ const EduExp = () => {
                          </ul>
                        </div>
                        
-                       <div className="space-y-2">
+                       <div className="space-y-2 hidden md:block">
                          <div className="text-lg text-white/80 font-semibold">
                            Key Skills:
                          </div>
@@ -319,7 +331,7 @@ const EduExp = () => {
             viewport={{ once: true }}
             className="space-y-12"
           >
-            <h4 className="text-7xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight uppercase">
+            <h4 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-none tracking-tight uppercase">
               ACHIEVEMENTS & RECOGNITION
             </h4>
             

@@ -9,7 +9,8 @@ export default function Hero() {
   const containerRef = React.useRef();
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
+    layoutEffect: false
   });
 
   // Diagonal scroll: y = up, x = left
@@ -40,7 +41,7 @@ export default function Hero() {
         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
       >
         <h1
-          className="group uppercase text-white text-[15vw] font-black leading-none transform -skew-x-24 md:-skew-x-24 transition-all duration-300 outline-none select-none break-words whitespace-normal inline-block mx-auto"
+          className="group uppercase text-white text-[8vw] sm:text-[10vw] md:text-[12vw] lg:text-[15vw] font-black leading-none transform sm:-skew-x-18 md:-skew-x-24 transition-all duration-300 outline-none select-none break-words whitespace-normal inline-block mx-auto"
           style={{ WebkitTextStroke: '0px white' }}
         >
           <span className="hero-outline">NOT YOUR</span>{' '}

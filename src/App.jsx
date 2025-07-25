@@ -29,7 +29,7 @@ const AppContent = () => {
   return (
     <>
       {!isProjectsPage && <CustomCursor />}
-      <main id="main-content" role="main" tabIndex={-1} className="outline-none focus:outline-none relative">
+      <main id="main-content" role="main" tabIndex={-1} className="outline-none focus:outline-none relative" data-scroll-container>
         <Routes>
           <Route path="/" element={
             <>
