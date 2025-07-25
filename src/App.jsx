@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import Lenis from 'lenis';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { ResponsiveProvider } from './components/ResponsiveWrapper';
+import ErrorBoundary from './components/ErrorBoundary';
 import About from './components/About';
 import Projects from './components/Projects';
 
@@ -80,9 +82,13 @@ const App = () => {
   }, []);
 
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <ResponsiveProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </ResponsiveProvider>
+    </ErrorBoundary>
   );
 };
 

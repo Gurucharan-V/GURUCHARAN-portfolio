@@ -5,6 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Responsive Styles */
+@import './responsive.css';
+
 /* Custom CSS Variables */
 :root {
   --background: #000000;

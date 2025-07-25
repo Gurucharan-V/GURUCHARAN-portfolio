@@ -134,16 +134,21 @@ const EduExp = () => {
 
 
       {/* Education Section */}
-      <section id="education" className="relative min-h-screen bg-black flex items-start justify-start pt-16 pl-8 pr-8 pb-16">
-        <div className="container mx-auto max-w-7xl">
+      <section id="education" className="relative min-h-screen bg-black flex items-start justify-start 
+                                         pt-8 sm:pt-12 md:pt-16 
+                                         px-4 sm:px-6 md:px-8 
+                                         pb-8 sm:pb-12 md:pb-16">
+        <div className="container mx-auto max-w-7xl w-full">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="space-y-12"
+            className="space-y-8 sm:space-y-10 md:space-y-12"
           >
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight uppercase">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 
+                         font-black text-white leading-none tracking-tight uppercase
+                         break-words">
               EDUCATION
             </h2>
             
@@ -171,15 +176,15 @@ const EduExp = () => {
                   >
                     <div className="space-y-6">
                       <div className="border-b border-white/20 pb-4">
-                        <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
                           {edu.institution}
                         </h3>
-                        <h4 className="text-xl md:text-2xl font-semibold text-white/90 leading-tight mb-2">
+                        <h4 className="text-lg sm:text-xl md:text-2xl font-semibold text-white/90 leading-tight mb-2">
                           {edu.degree}
                         </h4>
-                        <div className="flex flex-wrap gap-4 text-lg text-white/70">
+                        <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg text-white/70">
                           <span>{edu.period}</span>
-                          <span>•</span>
+                          <span className="hidden sm:inline">•</span>
                           <span className="font-semibold">GPA: {edu.gpa}</span>
                         </div>
                       </div>
