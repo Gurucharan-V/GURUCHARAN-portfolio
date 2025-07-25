@@ -1,79 +1,165 @@
-import React, { useEffect, useRef } from 'react';
-
-const SHRINK_SCALE = 0.7;
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const CustomCursor = () => {
-  const cursorRef = useRef(null);
-  const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-  const scale = useRef(1);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isOverLink, setIsOverLink] = useState(false);
+  const location = useLocation();
 
-  // Responsive size (about 1.5 inches)
-  const getCursorSize = () => {
-    return `clamp(72px, 12vw, 144px)`;
-  };
+  // Show cursor on all pages
+  const shouldShowCursor = true;
 
-  // Animate cursor position and scale with requestAnimationFrame
   useEffect(() => {
-    let animationFrameId;
-    const updateCursor = () => {
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(calc(${mouse.current.x}px - 50%), calc(${mouse.current.y}px - 50%)) scale(${scale.current})`;
-      }
-      animationFrameId = requestAnimationFrame(updateCursor);
+    // Apply cursor effects on all pages
+    if (!shouldShowCursor) {
+      return;
+    }
+
+    const updateMousePosition = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+      setIsVisible(true);
     };
-    updateCursor();
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
 
-  // Track mouse position
-  useEffect(() => {
-    const moveCursor = (e) => {
-      mouse.current.x = e.clientX;
-      mouse.current.y = e.clientY;
+    const handleMouseEnter = () => {
+      setIsVisible(true);
     };
-    window.addEventListener('mousemove', moveCursor);
-    return () => window.removeEventListener('mousemove', moveCursor);
-  }, []);
 
-  // Shrink on interactive elements
-  useEffect(() => {
+    const handleMouseLeave = () => {
+      setIsVisible(false);
+    };
+
+    const handleMouseDown = () => {
+      setIsHovering(true);
+    };
+
+    const handleMouseUp = () => {
+      setIsHovering(false);
+    };
+
+    // Handle link hover effects
     const handlePointerOver = (e) => {
       const tag = e.target.tagName.toLowerCase();
-      if (["a", "button", "input", "textarea", "select", "label"].includes(tag) || e.target.getAttribute('tabindex')) {
-        scale.current = SHRINK_SCALE;
+      const className = e.target.className || '';
+      const hasGroupClass = className.includes('group');
+      
+      // Check if it's a clickable element or has group class (hero text)
+      if (["a", "button", "input", "textarea", "select", "label"].includes(tag) || 
+          e.target.getAttribute('tabindex') || 
+          e.target.closest('a') || 
+          e.target.closest('button') ||
+          hasGroupClass) {
+        setIsOverLink(true);
       }
     };
+
     const handlePointerOut = () => {
-      scale.current = 1;
+      setIsOverLink(false);
     };
+
+    // Hide default cursor comprehensively
+    document.body.style.cursor = 'none';
+    document.body.style.pointerEvents = 'auto';
+    
+    // Also hide cursor on all elements
+    const hideCursorOnAll = () => {
+      const allElements = document.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.style.cursor = 'none';
+      });
+    };
+    
+    // Hide cursor immediately and on any new elements
+    hideCursorOnAll();
+    
+    // Use MutationObserver to hide cursor on dynamically added elements
+    const observer = new MutationObserver(() => {
+      hideCursorOnAll();
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    // Add event listeners
+    document.addEventListener('mousemove', updateMousePosition);
+    document.addEventListener('mouseenter', handleMouseEnter);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('pointerover', handlePointerOver);
     document.addEventListener('pointerout', handlePointerOut);
+
     return () => {
+      // Restore default cursor
+      document.body.style.cursor = 'auto';
+      
+      // Restore cursor on all elements
+      const allElements = document.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.style.cursor = '';
+      });
+      
+      // Disconnect observer
+      observer.disconnect();
+      
+      // Remove event listeners
+      document.removeEventListener('mousemove', updateMousePosition);
+      document.removeEventListener('mouseenter', handleMouseEnter);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('pointerover', handlePointerOver);
       document.removeEventListener('pointerout', handlePointerOut);
     };
-  }, []);
+  }, [shouldShowCursor]);
 
-  // Style for the custom cursor
-  const cursorStyle = {
-    position: 'fixed',
-    left: 0,
-    top: 0,
-    zIndex: 9999,
-    pointerEvents: 'none',
-    width: getCursorSize(),
-    height: getCursorSize(),
-    borderRadius: '50%',
-    background: 'transparent',
-    backdropFilter: 'invert(1) grayscale(1)',
-    WebkitBackdropFilter: 'invert(1) grayscale(1)',
-    boxShadow: '0 0 0 2px rgba(255,255,255,0.15)',
-    mixBlendMode: 'normal',
-    willChange: 'transform',
-    transition: 'none', // No transition, all handled in rAF
-  };
+  // Don't render cursor if not enabled
+  if (!shouldShowCursor) {
+    return null;
+  }
 
-  return <div ref={cursorRef} style={cursorStyle} />;
+  // Use same size for all pages
+  const baseSize = 120; // Same size as main website
+  const linkSize = baseSize * 0.6; // 60% of base size when over links
+  const clickSize = baseSize * 0.8; // 80% of base size when clicking
+  
+  let currentSize = baseSize;
+  if (isOverLink) currentSize = linkSize;
+  if (isHovering) currentSize = clickSize;
+
+  return (
+    <div
+      className="fixed pointer-events-none z-[9999] transition-opacity duration-200"
+      style={{
+        left: mousePosition.x,
+        top: mousePosition.y,
+        opacity: isVisible ? 1 : 0,
+        transform: 'translate(-50%, -50%)',
+      }}
+    >
+      {/* Inverted color circle cursor - Same style as main website */}
+      <div
+        className="absolute rounded-full transition-all duration-300 ease-out"
+        style={{
+          width: `${currentSize}px`,
+          height: `${currentSize}px`,
+          background: 'transparent',
+          backdropFilter: 'invert(1) grayscale(1)',
+          WebkitBackdropFilter: 'invert(1) grayscale(1)',
+          border: '4px solid rgba(255, 255, 255, 0.6)',
+          boxShadow: '0 0 0 6px rgba(255, 255, 255, 0.3)',
+          mixBlendMode: 'normal',
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+    </div>
+  );
 };
 
 export default CustomCursor; 

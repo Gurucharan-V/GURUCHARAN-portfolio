@@ -10,5 +10,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true
+  },
+  assetsInclude: ['**/*.obj', '**/*.gltf', '**/*.glb'],
+  optimizeDeps: {
+    include: ['three', '@react-three/fiber', '@react-three/drei']
   }
 }) 

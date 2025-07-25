@@ -1,0 +1,53 @@
+[
+  {
+    "title": "Hand-Drawn Doodle Recognition Using Deep Learning",
+    "duration": "Sep 2024 - Dec 2024",
+    "institution": "University of Wisconsin-Milwaukee",
+    "description": "Developed a full-stack deep learning application inspired by Google's Quick, Draw! to recognize hand-drawn sketches in real time. Trained a Convolutional Neural Network (CNN) on 400,000+ images across 345 categories using the Quick, Draw! dataset. Achieved 61.15% validation accuracy and deployed the model as a TFLite version integrated with a FastAPI backend and TensorFlow.js frontend. The web app allows users to draw on a canvas and receive live predictions with top results and probabilities.",
+    "skills": [
+      "Python", "TensorFlow", "Keras", "FastAPI", "Pillow",
+      "Deep Learning", "Convolutional Neural Networks (CNN)",
+      "Image Processing", "Pattern Recognition"
+    ]
+  },
+  {
+    "title": "Steam Game Recommendation Engine",
+    "duration": "Sep 2024 - Dec 2024",
+    "institution": "University of Wisconsin-Milwaukee",
+    "description": "Worked on a master's project with Soumya and Harsha to develop a personalized game recommendation system for the Steam platform. Built a hybrid model using Collaborative Filtering (ALS), Content-Based Filtering (TF-IDF and cosine similarity), and Association Rule Mining (FP-Growth). The project involved extensive data preprocessing, feature engineering, and performance evaluation using RMSE and MSE, along with visualizations to interpret gaming behavior.",
+    "skills": [
+      "Mining", "Collaborative Filtering", "Content Filtering", "Python"
+    ]
+  },
+  {
+    "title": "CPU Scheduling Algorithms Simulator",
+    "duration": "Aug 2021 - Feb 2022",
+    "institution": "NBKR Institute of Science and Technology",
+    "description": "Built a CPU scheduling simulator in Python to replicate and analyze key operating system algorithms like FCFS, Round Robin, SPN, SRT, HRRN, Feedback, and Aging. Supported both trace-based and statistical analysis, offering insights into performance metrics like waiting time and turnaround time. Focused on algorithm design, efficient data structures, and real-time simulation logic without external libraries.",
+    "skills": [
+      "Python", "Data Structures", "Algorithms", "Operating Systems",
+      "CPU Scheduling", "Simulation", "Process Scheduling"
+    ]
+  },
+  {
+    "title": "Detection of Malicious Social-Bots with URLs using Learning Automata",
+    "duration": "Nov 2020 - May 2021",
+    "institution": "NBKR Institute of Science and Technology",
+    "description": "Developed a phishing and bot detection system using URL-based features and machine learning models (MLP, Naive Bayes, SVM). Implemented using Django with a MySQL backend and HTML, CSS, and JavaScript for the frontend. The model outperformed traditional decision tree and random forest methods in speed and accuracy.",
+    "skills": [
+      "Classification", "Support Vector Machine (SVM)", "Naive Bayes",
+      "HTML5", "CSS", "JavaScript", "Decision Trees", "Random Forest"
+    ]
+  },
+  {
+    "title": "Weather Report Application for Android and iOS using React Native",
+    "duration": "Jul 2020 - Sep 2020",
+    "institution": "NBKR Institute of Science and Technology",
+    "description": "Developed and deployed a cross-platform mobile application using React Native. Integrated OpenWeather API to provide real-time weather data. Used Expo SDK for Android deployment and Xcode with CocoaPods for iOS deployment. Focused on responsive design and seamless user experience.",
+    "skills": [
+      "Front-end Engineering", "JavaScript", "CSS", "Vanilla JavaScript",
+      "React Native", "CocoaPods", "Xcode", "Android SDK",
+      "Android Studio", "Expo SDK", "API"
+    ]
+  }
+]

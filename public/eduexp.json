@@ -1,0 +1,64 @@
+{
+  "education": [
+    {
+      "id": 1,
+      "degree": "Master of Science (MS) – Information Technology (STEM)",
+      "institution": "University of Wisconsin-Milwaukee",
+      "period": "Sep 2023 – May 2025",
+      "description": "Completed a 30-credit program focused on ML, data systems, cybersecurity, and cloud technologies.",
+      "concentration": "AI, Data Analytics, Business Intelligence",
+      "gpa": "3.87/4.0"
+    },
+    {
+      "id": 2,
+      "degree": "Bachelor of Technology (BTech) – Computer Science & Engineering",
+      "institution": "NBKR Institute of Science and Technology",
+      "period": "Sep 2018 – May 2022",
+      "description": "Comprehensive program covering core computer science principles and modern software development.",
+      "concentration": "Data Structures, Algorithms, Operating Systems, OOP, Computer Networks, DBMS",
+      "gpa": "8.7/10"
+    }
+  ],
+  "experience": [
+    {
+      "id": 1,
+      "title": "Student Associate – Assistive Technology & Accessibility Support",
+      "company": "UWM Accessibility Resource Center",
+      "period": "Sep 2024 – May 2025",
+      "location": "Milwaukee County, WI (Hybrid)",
+      "description": "Supported inclusive learning through assistive technology and academic accommodations. Ensured compliance with ADA and accessibility standards across digital and physical platforms."
+    },
+    {
+      "id": 2,
+      "title": "Lead – Procurement Team, Restaurant Operations",
+      "company": "University of Wisconsin-Milwaukee",
+      "period": "Jan 2024 – Aug 2024",
+      "location": "Milwaukee, WI",
+      "description": "Managed food inventory, coordinated vendor relations, and trained student staff. Led daily operations for the Sandburg Docks dining facility, ensuring cost-effective and compliant sourcing."
+    },
+    {
+      "id": 3,
+      "title": "Procurement Assistant – Restaurant Operations",
+      "company": "University of Wisconsin-Milwaukee",
+      "period": "Sep 2023 – Dec 2023",
+      "location": "Milwaukee, WI",
+      "description": "Supported procurement and supply chain tasks for campus dining services. Assisted with ordering, tracking, and vendor communication."
+    },
+    {
+      "id": 4,
+      "title": "Machine Learning Intern",
+      "company": "Indian Servers",
+      "period": "Sep 2021 – Nov 2021",
+      "location": "Remote",
+      "description": "Worked on ML model development and optimization including fake news detection using XGBoost. Integrated AI models with MediaPipe for real-time tracking applications."
+    },
+    {
+      "id": 5,
+      "title": "Microsoft Student Partner (MSP)",
+      "company": "Microsoft",
+      "period": "Dec 2019 – Apr 2021",
+      "location": "Andhra Pradesh, India",
+      "description": "Promoted Microsoft tools on campus through workshops and peer engagement. Built a student tech community and supported technical learning initiatives."
+    }
+  ]
+} 

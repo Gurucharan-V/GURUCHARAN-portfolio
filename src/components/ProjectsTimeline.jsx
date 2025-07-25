@@ -1,21 +1,25 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useScroll, useTransform } from 'framer-motion';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import CenterUnderline from './CenterUnderline';
+import ComesInGoesOutUnderline from './ComesInGoesOutUnderline';
+import GoesOutComesInUnderline from './GoesOutComesInUnderline';
+
 
 const projects = [
-  { id: 1, title: 'GURUCHARAN V', link: '/about.html' },
-  { id: 2, title: 'EDUCATION', link: '/edu-exp.html' },
-  { id: 3, title: 'EXPERIENCE', link: '/edu-exp.html' },
-  { id: 4, title: 'PROJECTS', link: '/projects.html' },
+  { id: 1, title: 'GURUCHARAN V', link: '/about' },
+  { id: 2, title: 'EDUCATION', link: '/edu-exp' },
+  { id: 3, title: 'EXPERIENCE', link: '/edu-exp' },
+  { id: 4, title: 'PROJECTS', link: '/projects' },
   { id: 5, title: 'LINKEDIN', link: 'https://www.linkedin.com/in/gurucharanvem/' },
   { id: 6, title: 'GITHUB', link: 'https://github.com/Gurucharan-V' },
   { id: 7, title: 'RESUME' },
-  { id: 8, title: 'SKILLS', link: '/projects.html'},
-  { id: 7, title: 'HIRE ME', link: '/contact.html' },
+  { id: 8, title: 'SKILLS', link: '/projects'},
+  { id: 9, title: 'HIRE ME', isHireMe: true },
 ];
 
-const ProjectItem = ({ project, index }) => {
+const ProjectItem = ({ project, index, onHireMeClick, showContactDetails }) => {
   return (
     <motion.div
       className="mb-2 md:mb-4 group"
@@ -24,6 +28,7 @@ const ProjectItem = ({ project, index }) => {
       transition={{ duration: 0.3, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
       viewport={{ once: true, margin: '-30px' }}
     >
+
       <h2
         className="no-outline text-white text-6xl sm:text-9xl md:text-[10rem] lg:text-[14rem] font-black leading-none cursor-pointer transform -skew-x-24 md:-skew-x-24 transition-all duration-150 outline-none group-hover:text-transparent group-hover:[-webkit-text-stroke:4px_white] focus:text-transparent focus:[-webkit-text-stroke:4px_white] text-right"
         tabIndex={0}
@@ -48,6 +53,7 @@ const ProjectItem = ({ project, index }) => {
           e.target.style.WebkitTextStroke = '0px white';
           e.target.style.textShadow = 'none';
         }}
+        onClick={project.isHireMe ? onHireMeClick : undefined}
       >
         {project.link ? (
           project.link.startsWith('http') ? (
@@ -65,11 +71,16 @@ const ProjectItem = ({ project, index }) => {
 
 const ProjectsTimeline = () => {
   const containerRef = useRef();
+  const [showContactDetails, setShowContactDetails] = useState(false);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
   const y = useTransform(scrollYProgress, [0, 1], [-60, 0]);
+
+  const handleHireMeClick = () => {
+    setShowContactDetails(!showContactDetails);
+  };
 
   return (
     <section
@@ -88,9 +99,55 @@ const ProjectsTimeline = () => {
               key={project.id}
               project={project}
               index={index}
+              onHireMeClick={handleHireMeClick}
+              showContactDetails={showContactDetails}
             />
           ))}
         </div>
+        
+        {/* Contact Details Slide Down */}
+        <AnimatePresence>
+          {showContactDetails && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ 
+                duration: 0.08, 
+                ease: [0.4, 0, 1, 1] // fast out for enter, fast in for exit
+              }}
+              className="text-white text-right pr-8 mt-6"
+            >
+              <div className="space-y-3">
+                <h3 className="text-4xl font-black tracking-wider uppercase">LET'S WORK TOGETHER</h3>
+                <div className="space-y-2">
+                  <a 
+                    href="mailto:gvemuru1@gmail.com" 
+                    className="text-2xl font-bold tracking-wide block"
+                  >
+                    <CenterUnderline>gvemuru1@gmail.com</CenterUnderline>
+                  </a>
+                  <a
+                    href="https://github.com/Gurucharan-V"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-2xl font-bold tracking-wide block"
+                  >
+                    <ComesInGoesOutUnderline direction="right">GitHub: Gurucharan-V</ComesInGoesOutUnderline>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/gurucharanvem/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-2xl font-bold tracking-wide block"
+                  >
+                    <GoesOutComesInUnderline direction="left">LinkedIn: gurucharanvem</GoesOutComesInUnderline>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </section>
   );
