@@ -1,7 +1,7 @@
 import React from 'react';
 
 const heroTextClass =
-  'no-outline text-6xl sm:text-9xl md:text-[10rem] lg:text-[14rem] font-black leading-none cursor-pointer transform -skew-x-24 md:-skew-x-24 transition-all duration-150 outline-none relative z-10';
+  'no-outline text-6xl sm:text-9xl md:text-[10rem] lg:text-[14rem] font-black leading-none cursor-pointer transform -skew-x-24 md:-skew-x-24 transition-all duration-150 outline-none relative z-10 text-center';
 
 const HeroText = ({ text, className = '', color = 'white' }) => {
   const isBlack = color === 'black';

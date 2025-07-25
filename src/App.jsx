@@ -4,10 +4,8 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import About from './components/About';
 import Projects from './components/Projects';
 
-import Header from './components/Header';
 import Hero from './components/Hero';
 import ProjectsTimeline from './components/ProjectsTimeline';
-import Footer from './components/Footer';
 import WorkList from './components/WorkList';
 import CustomCursor from './components/CustomCursor';
 import MyStory from './components/MyStory';
@@ -18,18 +16,26 @@ const AppContent = () => {
   const isAboutPage = location.pathname === '/about';
   const isProjectsPage = location.pathname === '/projects';
 
+  // Scroll to top on route change
+  useEffect(() => {
+    const lenis = window.lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 0 });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname]);
+
   return (
     <>
       {!isProjectsPage && <CustomCursor />}
-      {!isAboutPage && !isProjectsPage && <Header />}
-      <main id="main-content" role="main" tabIndex={-1} className="outline-none focus:outline-none">
+      <main id="main-content" role="main" tabIndex={-1} className="outline-none focus:outline-none relative">
         <Routes>
           <Route path="/" element={
             <>
               <Hero />
               <ProjectsTimeline />
               <WorkList />
-              <Footer />
             </>
           } />
           <Route path="/about" element={<About />} />
@@ -57,6 +63,9 @@ const App = () => {
       infinite: false,
     });
 
+    // Make Lenis globally available
+    window.lenis = lenis;
+
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -66,6 +75,7 @@ const App = () => {
 
     return () => {
       lenis.destroy();
+      delete window.lenis;
     };
   }, []);
 

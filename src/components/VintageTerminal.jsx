@@ -9,94 +9,20 @@ const VintageTerminal = () => {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isBooting, setIsBooting] = useState(true);
   const [cursorVisible, setCursorVisible] = useState(true);
+
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Boot sequence messages (realistic fake boot)
+  // Boot sequence messages (fast boot)
   const bootMessages = [
     'BIOS Version 2.0.1',
-    'Copyright (C) 1985-2024 Phoenix Technologies Ltd.',
-    'All Rights Reserved.',
-    '',
-    'Phoenix - AwardBIOS v6.00PG',
-    'An Energy Star Ally',
-    'Copyright (C) 1984-2024 Phoenix Technologies Ltd.',
-    '',
-    'CPU: Intel(R) Core(TM) i7-12700K @ 3.60GHz',
-    'Memory Test: 32768K OK',
-    'Memory: 32768K Base Memory, 0K Extended Memory',
-    '',
-    'Detecting IDE drives...',
-    'Primary Master: WDC WD1003FZEX-00K3CA0 1000.2GB',
-    'Primary Slave: None',
-    'Secondary Master: None',
-    'Secondary Slave: None',
-    '',
-    'Detecting SCSI drives...',
-    'SCSI Device 0: None',
-    '',
-    'Initializing USB Controllers...',
-    'USB Controller 1: Intel(R) USB 3.0 eXtensible Host Controller',
-    'USB Controller 2: Intel(R) USB 3.0 eXtensible Host Controller',
-    '',
-    'Loading Operating System...',
-    '',
-    'GRUB version 2.06',
-    'Minimal BASH-like line editing is supported.',
-    'For the first word, TAB lists possible command completions.',
-    'Anywhere else TAB lists possible device or file completions.',
-    '',
-    'grub> boot',
-    '',
-    'Loading Linux kernel...',
-    'Loading initial ramdisk...',
-    '',
-    'Linux version 5.15.0-generic (buildd@lgw01-amd64-038)',
-    'Command line: BOOT_IMAGE=/boot/vmlinuz-5.15.0-generic root=UUID=12345678-1234-1234-1234-123456789012 ro quiet splash',
-    '',
-    'Dentry cache hash table entries: 2097152 (order: 12, 16777216 bytes, linear)',
-    'Inode-cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)',
-    'mem auto-init: stack:byref_all, heap:byref_all, heap:init_all',
-    'Memory: 32040960K/33554432K available (16384K kernel code, 3120K rwdata, 6304K rodata, 16384K init, 16384K bss, 1513472K reserved, 0K cma-reserved)',
-    'SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=16, Nodes=1',
-    'Kernel/User page tables isolation: enabled',
-    'CPU: Physical Processor ID: 0',
-    'CPU: Processor Core ID: 0',
-    'CPU: L1 Data cache: 32K, L1 Instruction cache: 32K',
-    'CPU: L2 cache: 256K',
-    'CPU: L3 cache: 24576K',
-    '',
-    'Loading modules...',
-    '[   0.123456] Loading module: ext4',
-    '[   0.234567] Loading module: xfs',
-    '[   0.345678] Loading module: btrfs',
-    '[   0.456789] Loading module: overlay',
-    '',
-    'Mounting root filesystem...',
-    '[   1.234567] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)',
-    '',
-    'Starting system services...',
-    '[   2.345678] systemd[1]: systemd 249.11-0ubuntu3.6 running in system mode',
-    '[   2.456789] systemd[1]: Detected virtualization kvm.',
-    '[   2.567890] systemd[1]: Detected architecture x86-64.',
-    '',
-    'Initializing network...',
-    '[   3.678901] e1000e: Intel(R) PRO/1000 Network Driver',
-    '[   3.789012] e1000e: Copyright(c) 1999-2015 Intel Corporation.',
-    '[   3.890123] e1000e 0000:00:1f.6: Intel(R) PRO/1000 Network Connection',
-    '',
-    'Loading user environment...',
-    '[   4.901234] systemd[1]: Started User Manager for UID 1000.',
-    '[   4.912345] systemd[1]: Starting Session 1 of user guest.',
-    '',
-    'System boot complete.',
-    '',
-    'Welcome to VINTAGE TERMINAL v1.0',
-    'Type "help" for available commands.',
+    'Loading kernel...',
+    'Mounting filesystems...',
+    'System ready.',
     ''
   ];
 
-  // Available commands (no contact, github, linkedin, resume, or portfolio info)
+  // Available commands with easter eggs
   const commands = {
     help: () => [
       'Available commands:',
@@ -110,6 +36,18 @@ const VintageTerminal = () => {
       '  scan          - Run system diagnostics',
       '  date          - Show current date and time',
       '  whoami        - Show current user',
+      '  sudo          - Execute command as superuser',
+      '  matrix        - Enter the Matrix',
+      '  fortune       - Get a random fortune',
+      '  cowsay        - Make a cow say something',
+      '  sl            - Steam locomotive',
+      '  telnet        - Connect to remote host',
+      '  ping          - Test network connectivity',
+      '  top           - Show system processes',
+      '  ps            - Show running processes',
+      '  kill          - Terminate processes',
+      '  chmod         - Change file permissions',
+      '  rm            - Remove files (use with caution!)',
       ''
     ],
     clear: () => {
@@ -197,12 +135,211 @@ const VintageTerminal = () => {
       'Home directory: /home/guest',
       'Shell: /bin/zsh',
       ''
-    ]
+    ],
+    sudo: (args) => {
+      if (!args || args.length === 0) {
+        return ['usage: sudo <command>', 'Try: sudo --help for more information.', ''];
+      }
+      const command = args.join(' ');
+      if (command.includes('su') || command.includes('su -')) {
+        return [
+          'sudo: su: command not found',
+          'sudo: unable to execute su: No such file or directory',
+          ''
+        ];
+      }
+      if (command.includes('rm -rf /')) {
+        return [
+          'sudo: rm: refusing to remove /',
+          'sudo: rm: this would delete the entire filesystem',
+          'sudo: rm: use --no-preserve-root to override this safety feature',
+          ''
+        ];
+      }
+      return [
+        '[sudo] password for guest: ',
+        '***',
+        `sudo: ${command}: command not found`,
+        ''
+      ];
+    },
+    fortune: () => {
+      const fortunes = [
+        'A bug in the hand is better than one as yet undetected.',
+        'A computer scientist is someone who fixes things that aren\'t broken.',
+        'A journey of a thousand miles begins with a single step.',
+        'A program is never less than 90% complete, and never more than 95% complete.',
+        'All programs are benign until proven malignant.',
+        'Any program that runs right is obsolete.',
+        'Computers are like air conditioners. They stop working when you open Windows.',
+        'Debugging is twice as hard as writing the code in the first place.',
+        'Don\'t comment bad code - rewrite it.',
+        'Good programmers write code that humans can understand.',
+        'Hardware: The parts of a computer that can be kicked.',
+        'If at first you don\'t succeed, call it version 1.0.',
+        'If debugging is the process of removing bugs, then programming must be the process of putting them in.',
+        'It\'s not a bug - it\'s an undocumented feature.',
+        'Life is too short for proprietary software.',
+        'Make it work, make it right, make it fast.',
+        'Real programmers don\'t comment their code. If it was hard to write, it should be hard to understand.',
+        'Software is like entropy: It is difficult to grasp, weighs nothing, and obeys the Second Law of Thermodynamics; i.e., it always increases.',
+        'The best way to predict the future is to implement it.',
+        'The only way to learn a new programming language is by writing programs in it.',
+        'There are two ways to write error-free programs; only the third one works.',
+        'Unix is user-friendly. It\'s just very particular about who its friends are.',
+        'When in doubt, use brute force.',
+        'You can\'t have great software without a great team.',
+        'Your most unhappy customers are your greatest source of learning.'
+      ];
+      const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      return [
+        randomFortune,
+        ''
+      ];
+    },
+    cowsay: (args) => {
+      const message = args && args.length > 0 ? args.join(' ') : 'Hello from the terminal!';
+      return [
+        message,
+        ''
+      ];
+    },
+    matrix: () => {
+      return [
+        'Wake up, Neo...',
+        'The Matrix has you...',
+        'Follow the white rabbit.',
+        '',
+        'Knock, knock, Neo.',
+        '',
+        'The Matrix is everywhere. It is all around us. Even now, in this very room.',
+        'You can see it when you look out your window or when you turn on your television.',
+        'You can feel it when you go to work... when you go to church... when you pay your taxes.',
+        'It is the world that has been pulled over your eyes to blind you from the truth.',
+        '',
+        'That you are a slave, Neo. Like everyone else you were born into bondage.',
+        'Into a prison that you cannot taste or see or touch. A prison for your mind.',
+        '',
+        'Unfortunately, no one can be... told what the Matrix is. You have to see it for yourself.',
+        '',
+        'This is your last chance. After this, there is no turning back.',
+        'You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe.',
+        'You take the red pill - you stay in Wonderland and I show you how deep the rabbit-hole goes.',
+        '',
+        'Remember: all I\'m offering is the truth. Nothing more.',
+        ''
+      ];
+    },
+
+    sl: () => {
+      return [
+        'Steam Locomotive Animation:',
+        'Choo choo! The steam locomotive has passed by.',
+        'Type "sl" again to see it again!',
+        ''
+      ];
+    },
+    ping: (args) => {
+      const target = args && args.length > 0 ? args[0] : 'google.com';
+      return [
+        `PING ${target} (142.250.190.78) 56(84) bytes of data.`,
+        '64 bytes from 142.250.190.78: icmp_seq=1 time=15.2 ms',
+        '64 bytes from 142.250.190.78: icmp_seq=2 time=14.8 ms',
+        '64 bytes from 142.250.190.78: icmp_seq=3 time=16.1 ms',
+        '64 bytes from 142.250.190.78: icmp_seq=4 time=15.5 ms',
+        '',
+        `--- ${target} ping statistics ---`,
+        '4 packets transmitted, 4 received, 0% packet loss, time 3003ms',
+        'rtt min/avg/max/mdev = 14.800/15.400/16.100/0.500 ms',
+        ''
+      ];
+    },
+    top: () => {
+      return [
+        'top - 14:30:25 up 2 days,  3:15,  1 user,  load average: 0.52, 0.48, 0.45',
+        'Tasks: 125 total,   1 running, 124 sleeping,   0 stopped,   0 zombie',
+        '%Cpu(s):  2.3 us,  1.2 sy,  0.0 ni, 96.3 id,  0.2 wa,  0.0 hi,  0.0 si,  0.0 st',
+        'MiB Mem :  32768.0 total,  25216.0 free,   4096.0 used,   3456.0 buff/cache',
+        'MiB Swap:   8192.0 total,   8192.0 free,      0.0 used.  28160.0 avail Mem',
+        '',
+        '    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND',
+        '   1234 root      20   0  1234567  12345   1234 S   2.3   0.4   0:15.23 systemd',
+        '   1235 root      20   0  1234567  12345   1234 S   1.8   0.3   0:12.45 kthreadd',
+        '   1236 root      20   0  1234567  12345   1234 S   1.2   0.2   0:08.12 kworker/0:0',
+        '   1237 root      20   0  1234567  12345   1234 S   0.8   0.1   0:05.67 kworker/0:1',
+        '   1238 root      20   0  1234567  12345   1234 S   0.5   0.1   0:03.45 kworker/0:2',
+        ''
+      ];
+    },
+    ps: () => {
+      return [
+        '    PID TTY          TIME CMD',
+        '   1234 pts/0    00:00:00 bash',
+        '   1235 pts/0    00:00:00 ps',
+        '   1236 pts/0    00:00:00 top',
+        '   1237 pts/0    00:00:00 htop',
+        '   1238 pts/0    00:00:00 nano',
+        '   1239 pts/0    00:00:00 vim',
+        '   1240 pts/0    00:00:00 git',
+        '   1241 pts/0    00:00:00 node',
+        '   1242 pts/0    00:00:00 npm',
+        '   1243 pts/0    00:00:00 python',
+        ''
+      ];
+    },
+    kill: (args) => {
+      if (!args || args.length === 0) {
+        return ['usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]', ''];
+      }
+      const pid = args[0];
+      return [
+        `kill: cannot kill process ${pid}: No such process`,
+        `kill: cannot kill process ${pid}: Operation not permitted`,
+        ''
+      ];
+    },
+    chmod: (args) => {
+      if (!args || args.length < 2) {
+        return ['usage: chmod [OPTION]... MODE[,MODE]... FILE...', 'Try \'chmod --help\' for more information.', ''];
+      }
+      return [
+        `chmod: changing permissions of '${args[1]}': Operation not permitted`,
+        `chmod: cannot access '${args[1]}': No such file or directory`,
+        ''
+      ];
+    },
+    rm: (args) => {
+      if (!args || args.length === 0) {
+        return ['usage: rm [OPTION]... FILE...', 'Try \'rm --help\' for more information.', ''];
+      }
+      if (args.includes('-rf') && args.includes('/')) {
+        return [
+          'rm: it is dangerous to operate recursively on \'/\'',
+          'rm: use --no-preserve-root to override this safety feature',
+          ''
+        ];
+      }
+      return [
+        `rm: cannot remove '${args[0]}': No such file or directory`,
+        `rm: cannot remove '${args[0]}': Permission denied`,
+        ''
+      ];
+    },
+    telnet: (args) => {
+      const target = args && args.length > 0 ? args[0] : 'localhost';
+      return [
+        `Trying ${target}...`,
+        `telnet: connect to address ${target}: Connection refused`,
+        `telnet: Unable to connect to remote host`,
+        ''
+      ];
+    }
   };
 
   // Boot sequence effect
   useEffect(() => {
     if (isBooting) {
+      setTerminalOutput([]); // Clear output before starting boot
       let messageIndex = 0;
       const bootInterval = setInterval(() => {
         if (messageIndex < bootMessages.length) {
@@ -211,8 +348,15 @@ const VintageTerminal = () => {
         } else {
           setIsBooting(false);
           clearInterval(bootInterval);
+          // After boot, show welcome message
+          setTimeout(() => {
+            setTerminalOutput(prev => [...prev, '']);
+            setTerminalOutput(prev => [...prev, 'Welcome to VINTAGE TERMINAL v1.0']);
+            setTerminalOutput(prev => [...prev, 'Type "help" for available commands.']);
+            setTerminalOutput(prev => [...prev, '']);
+          }, 100);
         }
-      }, 200);
+      }, 20);
     }
   }, [isBooting]);
 

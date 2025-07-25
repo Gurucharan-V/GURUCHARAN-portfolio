@@ -9,8 +9,8 @@ import GoesOutComesInUnderline from './GoesOutComesInUnderline';
 
 const projects = [
   { id: 1, title: 'GURUCHARAN V', link: '/about' },
-  { id: 2, title: 'EDUCATION', link: '/edu-exp' },
-  { id: 3, title: 'EXPERIENCE', link: '/edu-exp' },
+  { id: 2, title: 'EDUCATION', link: '/edu-exp#education' },
+  { id: 3, title: 'EXPERIENCE', link: '/edu-exp#experience' },
   { id: 4, title: 'PROJECTS', link: '/projects' },
   { id: 5, title: 'LINKEDIN', link: 'https://www.linkedin.com/in/gurucharanvem/' },
   { id: 6, title: 'GITHUB', link: 'https://github.com/Gurucharan-V' },
@@ -84,7 +84,7 @@ const ProjectsTimeline = () => {
   return (
     <section
       ref={containerRef}
-      className="w-full flex flex-col items-end bg-background overflow-visible minimal-padding pr-8"
+      className="w-full flex flex-col items-end bg-background overflow-visible minimal-padding pr-8 relative pt-32"
       id="work"
       aria-labelledby="work-section-title"
     >

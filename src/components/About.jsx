@@ -6,7 +6,14 @@ import LightRays from './LightRays';
 
 const About = () => {
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Use Lenis smooth scrolling to scroll to top
+    const lenis = window.lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 0 });
+    } else {
+      // Fallback to regular scroll if Lenis is not available
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   return (
