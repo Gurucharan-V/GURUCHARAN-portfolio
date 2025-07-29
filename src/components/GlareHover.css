@@ -40,4 +40,17 @@
 .glare-hover--play-once:hover::before {
   transition: var(--gh-duration) ease;
   background-position: 100% 100%, 0 0;
+}
+
+/* Disable hover animations on mobile */
+.glare-hover.no-hover:hover::before {
+  background-position: -100% -100%, 0 0;
+}
+
+.glare-hover.no-hover:hover {
+  cursor: default;
+}
+
+.glare-hover.no-hover::before {
+  transition: none;
 } 

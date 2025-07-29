@@ -565,18 +565,18 @@ const VintageTerminal = () => {
   }, [isBooting]);
 
   return (
-    <div className="vintage-terminal">
-      <div className="terminal-screen">
-        <div className="scan-lines"></div>
-        <div className="terminal-content" ref={terminalRef}>
+    <div className="vintage-terminal" data-testid="vintage-terminal">
+      <div className="terminal-screen" data-testid="terminal-screen">
+        <div className="scan-lines" data-testid="scan-lines"></div>
+        <div className="terminal-content" ref={terminalRef} data-testid="terminal-content">
           {terminalOutput.map((line, index) => (
-            <div key={index} className="terminal-line">
+            <div key={index} className="terminal-line" data-testid="terminal-line">
               {line}
             </div>
           ))}
           {!isBooting && (
-            <div className="command-line">
-              <span className="prompt">guest@vintage:~$ </span>
+            <div className="command-line" data-testid="command-line">
+              <span className="prompt" data-testid="terminal-prompt">guest@vintage:~$ </span>
               <input
                 ref={inputRef}
                 type="text"
@@ -584,9 +584,10 @@ const VintageTerminal = () => {
                 onChange={(e) => setCurrentCommand(e.target.value)}
                 onKeyDown={handleKeyPress}
                 className="command-input"
+                data-testid="command-input"
                 autoFocus
               />
-              <span className={`cursor ${cursorVisible ? 'visible' : ''}`}>█</span>
+              <span className={`cursor ${cursorVisible ? 'visible' : ''}`} data-testid="terminal-cursor">█</span>
             </div>
           )}
         </div>

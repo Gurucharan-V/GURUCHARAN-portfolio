@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
-import signatureImage from './signature.png';
-import LightRays from './LightRays';
+
+// Lazy load LightRays component since it uses WebGL
+const LightRays = lazy(() => import('./LightRays'));
 
 const About = () => {
   useEffect(() => {
@@ -23,18 +24,20 @@ const About = () => {
       <section className="relative h-screen flex items-center justify-center" style={{ alignItems: 'center', justifyContent: 'center' }}>
         {/* Light Rays Effect - Desktop Only */}
         <div className="hidden md:block" style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
-          <LightRays
-            raysOrigin="top-center"
-            raysColor="#ffffff"
-            raysSpeed={1.5}
-            lightSpread={0.8}
-            rayLength={1.2}
-            followMouse={true}
-            mouseInfluence={0.1}
-            noiseAmount={0.1}
-            distortion={0.05}
-            className="custom-rays"
-          />
+          <Suspense fallback={null}>
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#ffffff"
+              raysSpeed={1.5}
+              lightSpread={0.8}
+              rayLength={1.2}
+              followMouse={true}
+              mouseInfluence={0.1}
+              noiseAmount={0.1}
+              distortion={0.05}
+              className="custom-rays"
+            />
+          </Suspense>
         </div>
         
         {/* Mobile Light Effect - CSS-based fallback */}
@@ -90,7 +93,7 @@ const About = () => {
             </p>
             <div className="flex gap-8 items-center">
               <a 
-                href="https://leetcode.com/" 
+                href="https://leetcode.com/u/Gurucharan_Vemuru/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-2xl md:text-3xl text-white hover:text-white/70 transition-all duration-300 cursor-pointer underline focus:outline-none"
@@ -105,7 +108,7 @@ const About = () => {
                 LeetCode
               </a>
               <a 
-                href="https://linkedin.com/" 
+                href="https://www.linkedin.com/in/gurucharanvem/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-2xl md:text-3xl text-white hover:text-white/70 transition-all duration-300 cursor-pointer underline focus:outline-none"
@@ -120,7 +123,7 @@ const About = () => {
                 LinkedIn
               </a>
               <a 
-                href="https://github.com/" 
+                href="https://github.com/Gurucharan-V" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-2xl md:text-3xl text-white hover:text-white/70 transition-all duration-300 cursor-pointer underline focus:outline-none"
@@ -187,20 +190,7 @@ const About = () => {
                 Beyond my technical background, I actively pursue creative and competitive interests. I have hands-on experience in videography and video editing at the UWM Recreation Center. Photography is another passion where I explore composition, lighting, and storytelling. I enjoy drawing creative inspiration from movies and cinematography. As a dedicated gamer, I won first place in the Valorant tournament at UWM's Basement Bash. These activities keep me focused, sharp, and collaborative. They also bring fresh perspective and creativity into my work as a developer.
               </span>
             </p>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-center md:text-right w-full"
-            >
-              <img 
-                src={signatureImage} 
-                alt="Gurucharan Vemuru Signature" 
-                className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl w-auto h-auto mx-auto md:ml-auto md:mr-0 transform -rotate-20"
-                style={{ filter: 'brightness(0) invert(1)' }}
-              />
-            </motion.div>
+
           </motion.div>
         </div>
       </section>

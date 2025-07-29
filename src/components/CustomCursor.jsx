@@ -6,13 +6,31 @@ const CustomCursor = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isOverLink, setIsOverLink] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
 
-  // Show cursor on all pages
-  const shouldShowCursor = true;
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                            window.innerWidth <= 768 ||
+                            'ontouchstart' in window;
+      setIsMobile(isMobileDevice);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
+  // Show cursor on all pages, but not on mobile
+  const shouldShowCursor = !isMobile;
 
   useEffect(() => {
-    // Apply cursor effects on all pages
+    // Don't apply cursor effects on mobile devices
     if (!shouldShowCursor) {
       return;
     }
@@ -116,7 +134,7 @@ const CustomCursor = () => {
     };
   }, [shouldShowCursor]);
 
-  // Don't render cursor if not enabled
+  // Don't render cursor if not enabled or on mobile
   if (!shouldShowCursor) {
     return null;
   }

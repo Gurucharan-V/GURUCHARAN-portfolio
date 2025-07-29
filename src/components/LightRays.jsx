@@ -62,6 +62,8 @@ const LightRays = ({
   const cleanupFunctionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const observerRef = useRef(null);
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -69,9 +71,17 @@ const LightRays = ({
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        setIsVisible(entry.isIntersecting);
+        // Add debouncing to prevent rapid state changes during scroll
+        const timeoutId = setTimeout(() => {
+          setIsVisible(entry.isIntersecting);
+        }, 100);
+        
+        return () => clearTimeout(timeoutId);
       },
-      { threshold: 0.1 }
+      { 
+        threshold: 0.2,
+        rootMargin: '50px'
+      }
     );
 
     observerRef.current.observe(containerRef.current);
@@ -95,19 +105,26 @@ const LightRays = ({
     const initializeWebGL = async () => {
       if (!containerRef.current) return;
 
-      await new Promise((resolve) => setTimeout(resolve, 10));
+      // Add a longer delay to prevent rapid re-initialization during scroll
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       if (!containerRef.current) return;
 
       const renderer = new Renderer({
         dpr: Math.min(window.devicePixelRatio, 2),
         alpha: true,
+        antialias: true,
+        powerPreference: "high-performance",
       });
       rendererRef.current = renderer;
 
       const gl = renderer.gl;
       gl.canvas.style.width = "100%";
       gl.canvas.style.height = "100%";
+      gl.canvas.style.position = "absolute";
+      gl.canvas.style.top = "0";
+      gl.canvas.style.left = "0";
+      gl.canvas.style.pointerEvents = "none";
 
       while (containerRef.current.firstChild) {
         containerRef.current.removeChild(containerRef.current.firstChild);
@@ -270,6 +287,12 @@ void main() {
           return;
         }
 
+        // Pause rendering during scroll to prevent flickering
+        if (isScrollingRef.current) {
+          animationIdRef.current = requestAnimationFrame(loop);
+          return;
+        }
+
         uniforms.iTime.value = t * 0.001;
 
         if (followMouse && mouseInfluence > 0.0) {
@@ -395,17 +418,40 @@ void main() {
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      if (!containerRef.current || !rendererRef.current) return;
+      if (!containerRef.current || !rendererRef.current || isScrollingRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
       const y = (e.clientY - rect.top) / rect.height;
       mouseRef.current = { x, y };
     };
 
+    const handleScroll = () => {
+      isScrollingRef.current = true;
+      
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      scrollTimeoutRef.current = setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 150);
+    };
+
     if (followMouse) {
       window.addEventListener("mousemove", handleMouseMove);
-      return () => window.removeEventListener("mousemove", handleMouseMove);
     }
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    
+    return () => {
+      if (followMouse) {
+        window.removeEventListener("mousemove", handleMouseMove);
+      }
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, [followMouse]);
 
   return (

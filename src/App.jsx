@@ -1,15 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import Lenis from 'lenis';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import About from './components/About';
-import Projects from './components/Projects';
 
-import Hero from './components/Hero';
-import ProjectsTimeline from './components/ProjectsTimeline';
-import WorkList from './components/WorkList';
-import CustomCursor from './components/CustomCursor';
-import MyStory from './components/MyStory';
-import EduExp from './components/EduExp';
+// Lazy load components for code splitting
+const About = lazy(() => import('./components/About'));
+const Projects = lazy(() => import('./components/Projects'));
+const Hero = lazy(() => import('./components/Hero'));
+const ProjectsTimeline = lazy(() => import('./components/ProjectsTimeline'));
+const WorkList = lazy(() => import('./components/WorkList'));
+const CustomCursor = lazy(() => import('./components/CustomCursor'));
+const MyStory = lazy(() => import('./components/MyStory'));
+const EduExp = lazy(() => import('./components/EduExp'));
+
+// Loading component for Suspense fallback
+const LoadingSpinner = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="text-white text-xl">Loading...</div>
+  </div>
+);
 
 const AppContent = () => {
   const location = useLocation();
@@ -28,20 +36,42 @@ const AppContent = () => {
 
   return (
     <>
-      {!isProjectsPage && <CustomCursor />}
+      {!isProjectsPage && (
+        <Suspense fallback={null}>
+          <CustomCursor />
+        </Suspense>
+      )}
       <main id="main-content" role="main" tabIndex={-1} className="outline-none focus:outline-none relative" data-scroll-container>
         <Routes>
           <Route path="/" element={
-            <>
-              <Hero />
-              <ProjectsTimeline />
-              <WorkList />
-            </>
+            <Suspense fallback={<LoadingSpinner />}>
+              <>
+                <Hero />
+                <ProjectsTimeline />
+                <WorkList />
+              </>
+            </Suspense>
           } />
-          <Route path="/about" element={<About />} />
-          <Route path="/my-story" element={<MyStory />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/edu-exp" element={<EduExp />} />
+          <Route path="/about" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <About />
+            </Suspense>
+          } />
+          <Route path="/my-story" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <MyStory />
+            </Suspense>
+          } />
+          <Route path="/projects" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <Projects />
+            </Suspense>
+          } />
+          <Route path="/edu-exp" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <EduExp />
+            </Suspense>
+          } />
         </Routes>
       </main>
     </>

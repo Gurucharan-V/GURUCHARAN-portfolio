@@ -148,7 +148,7 @@ const EduExp = () => {
             viewport={{ once: true }}
             className="space-y-12"
           >
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-none tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white leading-none tracking-tight uppercase">
               EDUCATION
             </h2>
             
@@ -176,28 +176,36 @@ const EduExp = () => {
                   >
                     <div className="space-y-6">
                       <div className="border-b border-white/20 pb-4">
-                        <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
+                        <h3 className="text-xl md:text-2xl font-bold text-white leading-tight mb-2">
                           {edu.institution}
                         </h3>
-                        <h4 className="text-xl md:text-2xl font-semibold text-white/90 leading-tight mb-2">
+                        <h4 className="text-lg md:text-xl font-semibold text-white/90 leading-tight mb-2">
                           {edu.degree}
                         </h4>
-                        <div className="flex flex-wrap gap-4 text-lg text-white/70">
-                          <span>{edu.period}</span>
-                          <span>•</span>
-                          <span className="font-semibold">GPA: {edu.gpa}</span>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
+                          <div className="flex items-center space-x-2 text-sm text-white/60 bg-white/5 px-3 py-1 rounded-full w-fit">
+                            <span className="font-medium">{edu.period}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm text-white/70 bg-white/5 px-3 py-1 rounded-full w-fit">
+                            <span className="font-semibold">GPA: {edu.gpa}</span>
+                          </div>
                         </div>
                       </div>
                       
                       <div className="space-y-4">
-                        <div className="text-lg text-white/80">
+                        <div className="text-base text-white/80">
                           <span className="font-semibold">Concentration:</span> {edu.concentration}
                         </div>
-                        <p className="text-lg text-white/90 leading-relaxed">
-                          {edu.highlights}
-                        </p>
+                        <div className="space-y-2">
+                          {edu.highlights.split('. ').filter(sentence => sentence.trim().length > 0).map((sentence, index) => (
+                            <div key={index} className="flex items-start text-base text-white/90 leading-relaxed">
+                              <span className="text-white/60 mr-2 mt-2 flex-shrink-0">•</span>
+                              <span>{sentence.trim()}</span>
+                            </div>
+                          ))}
+                        </div>
                         <div className="space-y-2 hidden md:block">
-                          <div className="text-lg text-white/80 font-semibold">
+                          <div className="text-base text-white/80 font-semibold">
                             Key Skills:
                           </div>
                           <div className="flex flex-wrap gap-2">
@@ -231,7 +239,7 @@ const EduExp = () => {
             viewport={{ once: true }}
             className="space-y-12"
           >
-            <h3 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-none tracking-tight uppercase">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white leading-none tracking-tight uppercase">
               EXPERIENCE
             </h3>
             
@@ -256,63 +264,73 @@ const EduExp = () => {
                     glareSize={200}
                     transitionDuration={650}
                     className="p-8 backdrop-blur-sm"
+                    style={{ display: 'block', placeItems: 'unset' }}
                   >
-                  <div className="space-y-6">
-                    <div className="border-b border-white/20 pb-4">
-                                             <h4 className="text-xl md:text-2xl font-bold text-white leading-tight mb-2">
-                         {exp.company}
-                       </h4>
-                       <h5 className="text-lg md:text-xl font-semibold text-white/90 leading-tight mb-2">
-                         {exp.title}
-                       </h5>
-                       <div className="flex flex-wrap gap-4 text-lg text-white/70">
-                         <span>{exp.period}</span>
-                         <span>•</span>
-                         <span>{exp.duration}</span>
-                         <span>•</span>
-                         <span>{exp.location}</span>
-                       </div>
+                    <div className="space-y-6 text-left">
+                      <div className="border-b border-white/20 pb-4 text-left">
+                        <h4 className="text-lg md:text-xl font-bold text-white leading-tight mb-2 text-left">
+                          {exp.company}
+                        </h4>
+                        <h5 className="text-base md:text-lg font-semibold text-white/90 leading-tight mb-2 text-left">
+                          {exp.title}
+                        </h5>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
+                          <div className="flex items-center space-x-2 text-sm text-white/60 bg-white/5 px-3 py-1 rounded-full w-fit">
+                            <span className="font-medium">{exp.period}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm text-white/70 bg-white/5 px-3 py-1 rounded-full w-fit">
+                            <span className="font-medium">{exp.duration}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm text-white/70 bg-white/5 px-3 py-1 rounded-full w-fit">
+                            <span className="font-medium">{exp.location}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4 text-left">
+                        <div className="space-y-3 text-left">
+                          <div className="text-base text-white/80 font-semibold text-left">
+                            Highlights:
+                          </div>
+                          {/* Mobile: Single summarized point */}
+                          <div className="block md:hidden text-left">
+                            <div className="space-y-2">
+                              {exp.mobileHighlight.split('. ').filter(sentence => sentence.trim().length > 0).map((sentence, index) => (
+                                <div key={index} className="flex items-start text-base text-white/90 leading-relaxed text-left">
+                                  <span className="text-white/60 mr-2 mt-2 flex-shrink-0">•</span>
+                                  <span className="text-left">{sentence.trim()}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          {/* Desktop: Full list of highlights */}
+                          <ul className="space-y-2 pl-4 hidden md:block text-left">
+                            {exp.highlights.map((highlight, highlightIndex) => (
+                              <li key={highlightIndex} className="text-base text-white/90 leading-relaxed flex items-start text-left">
+                                <span className="text-white/60 mr-2 mt-2">•</span>
+                                <span className="text-left">{highlight}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="space-y-2 hidden md:block text-left">
+                          <div className="text-base text-white/80 font-semibold text-left">
+                            Key Skills:
+                          </div>
+                          <div className="flex flex-wrap gap-2 text-left">
+                            {exp.skills.map((skill, skillIndex) => (
+                              <span
+                                key={skillIndex}
+                                className="px-3 py-1 bg-white/10 rounded-full text-sm text-white/90 border border-white/20 text-left"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    
-                                         <div className="space-y-4">
-                       <div className="space-y-3">
-                         <div className="text-lg text-white/80 font-semibold">
-                           Highlights:
-                         </div>
-                         {/* Mobile: Single summarized point */}
-                         <div className="block md:hidden">
-                           <p className="text-lg text-white/90 leading-relaxed">
-                             {exp.mobileHighlight}
-                           </p>
-                         </div>
-                         {/* Desktop: Full list of highlights */}
-                         <ul className="space-y-2 pl-4 hidden md:block">
-                           {exp.highlights.map((highlight, highlightIndex) => (
-                             <li key={highlightIndex} className="text-lg text-white/90 leading-relaxed flex items-start">
-                               <span className="text-white/60 mr-2 mt-2">•</span>
-                               {highlight}
-                             </li>
-                           ))}
-                         </ul>
-                       </div>
-                       
-                       <div className="space-y-2 hidden md:block">
-                         <div className="text-lg text-white/80 font-semibold">
-                           Key Skills:
-                         </div>
-                         <div className="flex flex-wrap gap-2">
-                           {exp.skills.map((skill, skillIndex) => (
-                             <span
-                               key={skillIndex}
-                               className="px-3 py-1 bg-white/10 rounded-full text-sm text-white/90 border border-white/20"
-                             >
-                               {skill}
-                             </span>
-                           ))}
-                         </div>
-                       </div>
-                     </div>
-                  </div>
                   </GlareHover>
                 </motion.div>
               ))}
@@ -331,7 +349,7 @@ const EduExp = () => {
             viewport={{ once: true }}
             className="space-y-12"
           >
-            <h4 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-none tracking-tight uppercase">
+            <h4 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white leading-none tracking-tight uppercase">
               ACHIEVEMENTS & RECOGNITION
             </h4>
             

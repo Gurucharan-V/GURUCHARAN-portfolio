@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useScroll, useTransform } from 'framer-motion';
 import { motion } from 'framer-motion';
-import Silk from './Silk';
+
+// Lazy load Silk component since it uses React Three Fiber
+const Silk = lazy(() => import('./Silk'));
 
 const HERO_TEXT = "NOT YOUR AVERAGE ENGINEER";
 
@@ -25,13 +27,15 @@ export default function Hero() {
     >
       {/* Silk Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <Silk
-          speed={5}
-          scale={1}
-          color="#7B7481"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
+        <Suspense fallback={null}>
+          <Silk
+            speed={5}
+            scale={1}
+            color="#7B7481"
+            noiseIntensity={1.5}
+            rotation={0}
+          />
+        </Suspense>
       </div>
       <motion.div
         className="relative z-10 text-center gpu-accelerated w-full"

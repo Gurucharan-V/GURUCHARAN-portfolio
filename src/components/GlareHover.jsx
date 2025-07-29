@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./GlareHover.css";
 
 const GlareHover = ({
@@ -16,6 +17,19 @@ const GlareHover = ({
   className = "",
   style = {},
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const hex = glareColor.replace("#", "");
   let rgba = glareColor;
   if (/^[0-9A-Fa-f]{6}$/.test(hex)) {
@@ -44,7 +58,7 @@ const GlareHover = ({
 
   return (
     <div
-      className={`glare-hover ${playOnce ? 'glare-hover--play-once' : ''} ${className}`}
+      className={`glare-hover ${playOnce ? 'glare-hover--play-once' : ''} ${isMobile ? 'no-hover' : ''} ${className}`}
       style={{ ...vars, ...style }}
     >
       {children}

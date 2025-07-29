@@ -66,6 +66,7 @@ export default {
         },
       },
       fontSize: {
+        '9xl': ['8rem', { lineHeight: '0.8' }],
         '10xl': ['10rem', { lineHeight: '0.8' }],
         '11xl': ['12rem', { lineHeight: '0.8' }],
         '12xl': ['14rem', { lineHeight: '0.8' }],

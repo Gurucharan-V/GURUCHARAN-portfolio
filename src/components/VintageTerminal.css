@@ -461,3 +461,17 @@
     content: '...';
   }
 } 
+
+/* Disable hover animations on mobile devices */
+@media (max-width: 768px) {
+  /* Disable project item hover effect on mobile */
+  .project-item:hover {
+    color: #00ff00;
+    text-shadow: none;
+  }
+  
+  /* Disable scrollbar hover effect on mobile */
+  .terminal-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+} 

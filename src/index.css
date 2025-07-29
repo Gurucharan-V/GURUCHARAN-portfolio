@@ -5,7 +5,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile Responsive Styles */
+/* Prevent jittering during development */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Optimize animations to prevent jitter */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    will-change: auto;
+  }
+}
+
+/* Development-specific optimizations */
 @media (max-width: 768px) {
   /* Optimize font sizes for mobile viewport */
   .text-6xl {
@@ -61,6 +76,59 @@
     font-size: 3rem;
     line-height: 1;
   }
+
+  /* Prevent mobile jitter and improve performance */
+  * {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    touch-action: manipulation !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Prevent text selection on mobile */
+  h1, h2, h3, h4, h5, h6, p, span, div {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+  }
+
+  /* Allow text selection only for input fields */
+  input, textarea {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+  }
+
+  /* Prevent zoom on double tap */
+  * {
+    touch-action: manipulation !important;
+  }
+
+  /* Smooth scrolling for mobile */
+  html {
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Prevent momentum scrolling issues */
+  body {
+    -webkit-overflow-scrolling: touch !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Fix for iOS Safari viewport issues */
+  @supports (-webkit-touch-callout: none) {
+    .minimal-padding {
+      padding-left: env(safe-area-inset-left) !important;
+      padding-right: env(safe-area-inset-right) !important;
+    }
+  }
 }
 
 /* Small mobile devices */
@@ -77,6 +145,13 @@
   
   .pt-64 {
     padding-top: 4rem;
+  }
+
+  /* Prevent any unwanted mobile interactions */
+  * {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    touch-action: manipulation !important;
   }
 }
 
@@ -98,59 +173,123 @@
   background: radial-gradient(circle, var(--tw-gradient-from), var(--tw-gradient-to));
 }
 
-/* Custom Pulse Animation for Mobile */
+/* Prevent mobile jitter globally */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* Ensure text stays white and links work properly */
+.text-white {
+  color: #ffffff !important;
+}
+
+a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+a:visited {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+a:active {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* Ensure links in ProjectsTimeline stay white */
+.no-outline {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.no-outline:hover {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.no-outline:visited {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.no-outline:active {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Optimize animations for mobile */
+@media (max-width: 768px) {
+  .animate-pulse {
+    animation-duration: 2s !important;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  * {
+    will-change: auto !important;
+  }
+  
+  /* Only use will-change for critical animations */
+  .motion-safe\:animate-pulse {
+    will-change: opacity !important;
+  }
+}
+
+/* Custom pulse animation */
 @keyframes custom-pulse {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.7;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .animate-pulse {
-  animation: custom-pulse 4s ease-in-out infinite;
+  animation: custom-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Base Styles */
+/* Global styles */
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--background);
-  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   background-color: var(--background);
   color: var(--text-primary);
   overflow-x: hidden;
-  line-height: 1.6;
-  cursor: none !important;
+  -webkit-overflow-scrolling: touch;
 }
 
+/* Prevent cursor issues on mobile */
 html, body, * {
-  cursor: none !important;
+  cursor: auto;
 }
 
-/* Custom Scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--surface);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
+  background: var(--muted);
   border-radius: 4px;
 }
 
@@ -158,38 +297,34 @@ html, body, * {
   background: var(--secondary);
 }
 
-/* Selection Styles */
+/* Selection styles */
 ::selection {
-  background: var(--accent);
+  background-color: var(--accent);
   color: var(--background);
 }
 
 ::-moz-selection {
-  background: var(--accent);
+  background-color: var(--accent);
   color: var(--background);
 }
 
-/* Text Outline Effect for Hover */
+/* Text outline hover effect */
 .text-outline-hover {
-  transition: all 0.3s cubic-bezier(0.40, 1.0, 0.2, 1.0);
-  will-change: color, text-shadow;
+  transition: all 0.3s ease;
 }
 
 .text-outline-hover:hover {
   color: transparent;
-  text-shadow: 
-    -1px 0 var(--primary),
-    1px 0 var(--primary),
-    -1px 0 var(--primary),
-    1px 0 var(--primary);
+  -webkit-text-stroke: 2px var(--primary);
+  text-stroke: 2px var(--primary);
 }
 
-/* Smooth Transitions */
+/* Smooth transitions */
 .smooth-transition {
-  transition: all 0.3s cubic-bezier(0.40, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Performance Optimizations */
+/* Performance optimizations */
 .will-change-transform {
   will-change: transform;
 }
@@ -199,27 +334,26 @@ html, body, * {
 }
 
 .will-change-all {
-  will-change: transform, opacity, color, text-shadow;
+  will-change: transform, opacity;
 }
 
-/* Hardware acceleration */
+/* GPU acceleration */
 .gpu-accelerated {
   transform: translateZ(0);
   backface-visibility: hidden;
-  perspective: 1000;
+  perspective: 1000px;
 }
 
-/* Focus Styles */
+/* Focus styles */
 *:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .no-outline:focus {
-  outline: none !important;
+  outline: none;
 }
 
-/* Reduce Motion for Accessibility */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -229,61 +363,67 @@ html, body, * {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-} 
+}
 
+/* Minimal padding utility */
 .minimal-padding {
-  padding-right: 2px !important;
-  margin-right: 0 !important;
-} 
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
 
+/* Hero outline effect */
 .hero-outline {
-  color: white;
-  -webkit-text-stroke: 0px white;
-  text-stroke: 0px white;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  color: var(--primary);
 }
+
 .hero-fill {
-  color: white;
-  -webkit-text-stroke: 0px white;
-  text-stroke: 0px white;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--primary);
+  text-stroke: 2px var(--primary);
 }
+
 .group:hover .hero-outline {
   color: transparent;
-  -webkit-text-stroke: 3px white;
-  text-stroke: 3px white;
-}
-.group:hover .hero-fill {
-  color: transparent;
-  -webkit-text-stroke: 3px white;
-  text-stroke: 3px white;
+  -webkit-text-stroke: 2px var(--primary);
+  text-stroke: 2px var(--primary);
 }
 
-/* Timeline Styles */
+.group:hover .hero-fill {
+  color: var(--primary);
+  -webkit-text-stroke: 0px var(--primary);
+  text-stroke: 0px var(--primary);
+}
+
+/* Timeline checkpoint styles */
 .timeline-checkpoint {
   position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
   padding-left: 2rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: timelineFadeIn 0.6s ease-out forwards;
 }
 
 .checkpoint-marker {
-  position: relative;
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin-top: 0.5rem;
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateX(-50%);
 }
 
 .checkpoint-line {
   position: absolute;
-  left: -1px;
-  top: 20px;
+  left: 0;
+  top: 1.2rem;
   width: 2px;
-  height: 100px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
-  z-index: 1;
+  height: calc(100% + 1rem);
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  transform: translateX(-50%);
 }
 
 .timeline-checkpoint:last-child .checkpoint-line {
@@ -291,88 +431,75 @@ html, body, * {
 }
 
 .checkpoint-content {
-  flex: 1;
-  padding-top: 0.5rem;
+  padding-left: 1rem;
 }
 
 .checkpoint-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: white;
-  margin-bottom: 1rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
 }
 
 .checkpoint-text {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.8);
-  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.875rem;
 }
 
-/* Timeline Animation */
-.timeline-checkpoint {
-  opacity: 0;
-  transform: translateX(-30px);
-  animation: timelineFadeIn 0.8s ease-out forwards;
-}
-
+/* Timeline animation delays */
 .timeline-checkpoint:nth-child(1) { animation-delay: 0.1s; }
 .timeline-checkpoint:nth-child(2) { animation-delay: 0.3s; }
 .timeline-checkpoint:nth-child(3) { animation-delay: 0.5s; }
 .timeline-checkpoint:nth-child(4) { animation-delay: 0.7s; }
 
 @keyframes timelineFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
-/* Responsive Timeline */
 @media (max-width: 768px) {
   .timeline-checkpoint {
-    flex-direction: column;
-    gap: 1rem;
-    padding-left: 1rem;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
   }
   
   .checkpoint-marker {
-    align-self: flex-start;
-    margin-top: 0;
+    width: 10px;
+    height: 10px;
   }
   
   .checkpoint-content {
-    padding-top: 0;
+    padding-left: 0.75rem;
   }
   
   .checkpoint-title {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
   
   .checkpoint-text {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 }
 
-/* THE PROJECT - 3D Perspective Component */
+/* Project 3D container */
 .project-3d-container {
-  perspective: 1200px;
-  cursor: pointer;
-  z-index: 10;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
 }
 
 .project-3d-text {
   position: relative;
-  transform-style: preserve-3d;
-  transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-size: 3rem;
-  font-weight: 900;
-  font-family: 'Arial', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transform: rotateX(15deg) rotateY(25deg) translateX(-80px);
+  z-index: 3;
+  transition: all 0.3s ease;
+  transform: translateZ(20px);
 }
 
 .project-layer {
@@ -381,58 +508,87 @@ html, body, * {
   left: 0;
   width: 100%;
   height: 100%;
-  transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.3s ease;
 }
 
 .project-back {
-  color: transparent;
-  -webkit-text-stroke: 3px white;
-  text-stroke: 3px white;
-  transform: translateZ(-30px);
-  filter: brightness(0.2);
+  z-index: 1;
+  transform: translateZ(-20px);
+  opacity: 0.3;
 }
 
 .project-middle {
-  color: transparent;
-  -webkit-text-stroke: 3px white;
-  text-stroke: 3px white;
-  transform: translateZ(-15px);
-  filter: brightness(0.5);
+  z-index: 2;
+  transform: translateZ(0px);
+  opacity: 0.6;
 }
 
 .project-front {
-  color: transparent;
-  -webkit-text-stroke: 3px white;
-  text-stroke: 3px white;
-  transform: translateZ(0px);
-  filter: brightness(1);
+  z-index: 3;
+  transform: translateZ(20px);
+  opacity: 1;
 }
 
-/* Hover State - Transform to 2D Flat */
 .project-3d-container:hover .project-3d-text {
-  transform: rotateX(0deg) rotateY(0deg) translateX(0px);
+  transform: translateZ(40px);
 }
 
 .project-3d-container:hover .project-back {
-  color: white;
-  -webkit-text-stroke: 0px white;
-  text-stroke: 0px white;
-  transform: translateZ(0px);
-  filter: brightness(1);
+  transform: translateZ(-40px);
+  opacity: 0.1;
 }
 
 .project-3d-container:hover .project-middle {
-  color: white;
-  -webkit-text-stroke: 0px white;
-  text-stroke: 0px white;
-  transform: translateZ(0px);
-  filter: brightness(1);
+  transform: translateZ(-20px);
+  opacity: 0.3;
 }
 
 .project-3d-container:hover .project-front {
-  color: white;
-  -webkit-text-stroke: 0px white;
-  text-stroke: 0px white;
   transform: translateZ(0px);
-  filter: brightness(1);
+  opacity: 0.8;
+}
+
+/* Disable hover animations on mobile devices */
+@media (max-width: 768px) {
+  /* Disable text outline hover effect on mobile */
+  .text-outline-hover:hover {
+    color: inherit;
+    text-shadow: none;
+  }
+  
+  /* Disable hero outline hover effect on mobile */
+  .group:hover .hero-outline {
+    color: inherit;
+    text-shadow: none;
+  }
+  
+  .group:hover .hero-fill {
+    color: inherit;
+    text-shadow: none;
+  }
+  
+  /* Disable project 3D hover effect on mobile */
+  .project-3d-container:hover .project-3d-text {
+    transform: none;
+  }
+  
+  .project-3d-container:hover .project-back {
+    transform: none;
+    opacity: inherit;
+  }
+  
+  .project-3d-container:hover .project-middle {
+    transform: none;
+    opacity: inherit;
+  }
+  
+  .project-3d-container:hover .project-front {
+    transform: none;
+    opacity: inherit;
+  }
+  
+  /* Disable scrollbar hover effect on mobile */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+  }
 } 
